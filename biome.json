@@ -33,6 +33,23 @@
       "next": "recommended"
     }
   },
+  "overrides": [
+    {
+      "includes": ["src/__tests__/**", "src/test/**"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noImgElement": "off"
+          }
+        }
+      }
+    }
+  ],
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
   "javascript": {
     "formatter": {
       "quoteStyle": "single"

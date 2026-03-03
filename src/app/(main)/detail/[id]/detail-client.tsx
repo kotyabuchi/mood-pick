@@ -152,11 +152,11 @@ export function DetailClient({ tmdbId, contentType }: DetailClientProps) {
               </button>
               {menuOpen && (
                 <>
-                  <div
-                    className="fixed inset-0 z-40"
+                  <button
+                    type="button"
+                    className="fixed inset-0 z-40 appearance-none bg-transparent border-none cursor-default"
                     onClick={() => setMenuOpen(false)}
-                    onKeyDown={() => {}}
-                    role="presentation"
+                    aria-label="メニューを閉じる"
                   />
                   <div className="absolute right-0 top-10 bg-surface rounded-lg shadow-lg z-50 min-w-[160px]">
                     {watchlistItem && (

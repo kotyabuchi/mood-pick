@@ -10,7 +10,6 @@ import {
   mockUsers,
   mockWatchlistItems,
 } from '@/lib/mock-data';
-import { daysUntil } from '@/lib/utils';
 
 describe('mockContents', () => {
   it('15件のコンテンツがある', () => {

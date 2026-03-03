@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 
 import { cn } from '@/lib/cn';
@@ -24,6 +24,7 @@ export function AuthInput({
   placeholder,
   autoComplete,
 }: AuthInputProps) {
+  const id = useId();
   const [showPassword, setShowPassword] = useState(false);
 
   const isPassword = type === 'password';
@@ -31,9 +32,12 @@ export function AuthInput({
 
   return (
     <div className="mb-4">
-      <label className="block text-text-secondary text-sm mb-2">{label}</label>
+      <label htmlFor={id} className="block text-text-secondary text-sm mb-2">
+        {label}
+      </label>
       <div className="relative">
         <input
+          id={id}
           type={inputType}
           value={value}
           onChange={(e) => onChange(e.target.value)}

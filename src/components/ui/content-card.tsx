@@ -81,9 +81,11 @@ function ContentCardInner({
             {showExpiration && item.streaming.some((s) => s.expiresAt) && (
               <div className="mt-1 flex gap-1 flex-wrap">
                 {item.streaming
-                  .filter((s) => s.expiresAt)
+                  .filter(
+                    (s): s is typeof s & { expiresAt: string } => !!s.expiresAt,
+                  )
                   .map((s) => (
-                    <UrgencyBadge key={s.service} expiresAt={s.expiresAt!} />
+                    <UrgencyBadge key={s.service} expiresAt={s.expiresAt} />
                   ))}
               </div>
             )}

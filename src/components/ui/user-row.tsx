@@ -20,12 +20,22 @@ export function UserRow({
   onFollowToggle,
 }: UserRowProps) {
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: role="button" is conditionally applied when onClick exists
     <div
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       className="flex items-center py-2 px-4 cursor-pointer hover:bg-surface-light transition-colors rounded-lg"
       onClick={onClick}
-      onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } } : undefined}
+      onKeyDown={
+        onClick
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onClick();
+              }
+            }
+          : undefined
+      }
     >
       <UserAvatar uri={user.avatarUrl} name={user.name} size={40} />
       <div className="flex-1 ml-3 min-w-0">

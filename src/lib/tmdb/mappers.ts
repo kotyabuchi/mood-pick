@@ -59,7 +59,11 @@ export function genreIdsToMoodTags(genreIds: number[]): MoodId[] {
   const moods = new Set<MoodId>();
   for (const id of genreIds) {
     const mapped = GENRE_MOOD_MAP[id];
-    if (mapped) mapped.forEach((m) => moods.add(m));
+    if (mapped) {
+      for (const m of mapped) {
+        moods.add(m);
+      }
+    }
   }
   return [...moods].slice(0, 3);
 }

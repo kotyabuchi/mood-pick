@@ -12,8 +12,8 @@ export default function MainLoading() {
         <div>
           <div className="h-5 w-24 bg-surface-light rounded mb-3" />
           <div className="flex gap-3 overflow-hidden">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="w-[130px] shrink-0">
+            {['s1-a', 's1-b', 's1-c', 's1-d'].map((id) => (
+              <div key={id} className="w-[130px] shrink-0">
                 <div className="aspect-[2/3] bg-surface-light rounded-lg" />
                 <div className="h-3 w-20 bg-surface-light rounded mt-2" />
               </div>
@@ -25,8 +25,8 @@ export default function MainLoading() {
         <div>
           <div className="h-5 w-36 bg-surface-light rounded mb-3" />
           <div className="flex gap-3 overflow-hidden">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="w-[130px] shrink-0">
+            {['s2-a', 's2-b', 's2-c', 's2-d'].map((id) => (
+              <div key={id} className="w-[130px] shrink-0">
                 <div className="aspect-[2/3] bg-surface-light rounded-lg" />
                 <div className="h-3 w-20 bg-surface-light rounded mt-2" />
               </div>

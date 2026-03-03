@@ -29,7 +29,7 @@ export function useWatchlistItem(tmdbId: number | null) {
 
   return useQuery({
     queryKey: watchlistKeys.detail(tmdbId ?? 0),
-    queryFn: () => api.fetchWatchlistItem(tmdbId!),
+    queryFn: () => api.fetchWatchlistItem(tmdbId ?? 0),
     enabled: !!user && tmdbId !== null,
   });
 }

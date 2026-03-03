@@ -4,14 +4,12 @@ import { useState } from 'react';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import * as Switch from '@radix-ui/react-switch';
 import { ChevronRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { SectionDivider } from '@/components/ui/section-divider';
 import { useAuth } from '@/context/auth-context';
 
 export default function SettingsPage() {
-  const router = useRouter();
   const { signOut } = useAuth();
 
   const [expirationAlert, setExpirationAlert] = useState(true);
