@@ -7,7 +7,14 @@
       "Bash(supabase status:*)",
       "Bash(supabase migration:*)",
       "Bash(supabase gen:*)",
-      "Bash(pnpm test:*)"
+      "Bash(pnpm test:*)",
+      "Bash(cloudflared:*)",
+      "Bash(npx supabase:*)",
+      "WebFetch(domain:supabase.com)",
+      "Skill(codex-debate)",
+      "Bash(npx biome:*)",
+      "Bash(codex exec:*)",
+      "Bash(npx react-doctor:*)"
     ]
   }
 }

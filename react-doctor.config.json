@@ -1,14 +1,6 @@
 {
   "ignore": {
-    "paths": [
-      "**/__tests__/**",
-      "**/*.test.tsx",
-      "**/*.test.ts"
-    ],
-    "rules": [
-      "knip/unused-files",
-      "knip/unused-exports",
-      "knip/unused-types"
-    ]
+    "paths": ["**/__tests__/**", "**/*.test.tsx", "**/*.test.ts"],
+    "rules": ["knip/unused-files", "knip/unused-exports", "knip/unused-types"]
   }
 }
