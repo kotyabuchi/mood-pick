@@ -11,7 +11,7 @@ import {
   watchlistKeys,
 } from '@/lib/watchlist';
 
-import type { Content, WatchlistItem, WatchStatus } from '@/types';
+import type { ContentDetail, WatchlistItem, WatchStatus } from '@/types';
 import type { WatchlistItemUpdate } from '@/types/database';
 
 export function useAddToWatchlist() {
@@ -24,7 +24,7 @@ export function useAddToWatchlist() {
       content,
       status = 'want',
     }: {
-      content: Content;
+      content: ContentDetail;
       status?: WatchStatus;
     }) => api.addWatchlistItem(mapContentToInsertRow(content, status)),
     onMutate: async ({ content, status = 'want' }) => {

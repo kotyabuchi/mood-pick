@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -8,7 +9,7 @@ import { AddToWatchlistDialog } from '@/components/ui/add-to-watchlist-dialog';
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { StarRating } from '@/components/ui/star-rating';
 import { UserAvatar } from '@/components/ui/user-avatar';
-import { mockFeedItems } from '@/lib/mock-data';
+import { useFeed } from '@/hooks/use-feed';
 import { formatRelativeTime } from '@/lib/utils';
 
 import type { Content, FeedItem } from '@/types';
@@ -74,7 +75,12 @@ function FeedCard({
             {item.content.title}
           </p>
           <p className="text-xs text-text-secondary mt-0.5">
-            {item.content.genre} · {item.content.runtime}分
+            {[
+              item.content.genre,
+              item.content.runtime ? `${item.content.runtime}分` : null,
+            ]
+              .filter(Boolean)
+              .join(' · ')}
           </p>
         </div>
       </Link>
@@ -106,6 +112,7 @@ function FeedCard({
 }
 
 export default function FeedPage() {
+  const { data: feedItems, isLoading, error } = useFeed();
   const [addDialogContent, setAddDialogContent] = useState<Content | null>(
     null,
   );
@@ -119,7 +126,29 @@ export default function FeedPage() {
       <ScreenHeader title="フィード" />
 
       <div className="pt-2 pb-8">
-        {mockFeedItems.map((item) => (
+        {isLoading && (
+          <div className="flex justify-center py-12">
+            <Loader2 className="w-8 h-8 text-accent animate-spin" />
+          </div>
+        )}
+
+        {error && (
+          <div className="text-center py-12 px-4">
+            <p className="text-text-secondary text-sm">
+              フィードの読み込みに失敗しました
+            </p>
+          </div>
+        )}
+
+        {!isLoading && !error && feedItems?.length === 0 && (
+          <div className="text-center py-12 px-4">
+            <p className="text-text-secondary text-sm">
+              フォロー中のユーザーのアクティビティがここに表示されます
+            </p>
+          </div>
+        )}
+
+        {feedItems?.map((item) => (
           <FeedCard
             key={item.id}
             item={item}

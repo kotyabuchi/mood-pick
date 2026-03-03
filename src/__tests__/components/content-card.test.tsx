@@ -3,9 +3,9 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ContentCard } from '@/components/ui/content-card';
 
-import type { Content, WatchlistItem } from '@/types';
+import type { ContentDetail, WatchlistItem } from '@/types';
 
-const mockContent: Content = {
+const mockContent: ContentDetail = {
   id: 'c-1',
   tmdbId: 12345,
   title: 'テスト映画',
@@ -46,7 +46,7 @@ describe('ContentCard - horizontal variant', () => {
 
   it('ジャンルとランタイムが表示される', () => {
     render(<ContentCard item={mockContent} variant="horizontal" />);
-    expect(screen.getByText('アクション · 120分')).toBeInTheDocument();
+    expect(screen.getByText('アクション · 120分 · 2023年')).toBeInTheDocument();
   });
 
   it('ストリーミングサービスが表示される', () => {
@@ -108,7 +108,7 @@ describe('ContentCard - list-item variant', () => {
 
   it('ジャンルとランタイムが表示される', () => {
     render(<ContentCard item={mockContent} variant="list-item" />);
-    expect(screen.getByText('アクション · 120分')).toBeInTheDocument();
+    expect(screen.getByText('アクション · 120分 · 2023年')).toBeInTheDocument();
   });
 
   it('showAddButtonがtrueの場合、追加ボタンが表示される', () => {
@@ -160,7 +160,7 @@ describe('ContentCard - navigation', () => {
   });
 
   it('animeタイプの場合、type=tvでリンクされる', () => {
-    const animeContent: Content = {
+    const animeContent: ContentDetail = {
       ...mockContent,
       type: 'anime',
     };

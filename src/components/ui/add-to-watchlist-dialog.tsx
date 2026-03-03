@@ -10,7 +10,11 @@ import { Moods } from '@/constants/theme';
 import { useContentDetail } from '@/hooks/use-content-detail';
 import { useAddToWatchlist } from '@/hooks/use-watchlist-mutations';
 
-import type { Content, ContentType, MoodId } from '@/types';
+import type { Content, ContentDetail, ContentType, MoodId } from '@/types';
+
+function isContentDetail(c: Content): c is ContentDetail {
+  return 'genre' in c && 'runtime' in c;
+}
 
 interface AddToWatchlistDialogProps {
   open: boolean;
@@ -27,12 +31,17 @@ export function AddToWatchlistDialog({
   tmdbId,
   contentType,
 }: AddToWatchlistDialogProps) {
+  const needsFetch = !providedContent || !isContentDetail(providedContent);
+  const resolvedTmdbId = providedContent?.tmdbId ?? tmdbId ?? null;
+  const resolvedType = providedContent?.type ?? contentType ?? null;
   const { content: fetchedContent, isLoading } = useContentDetail(
-    providedContent ? null : (tmdbId ?? null),
-    providedContent ? null : (contentType ?? null),
+    needsFetch ? resolvedTmdbId : null,
+    needsFetch ? resolvedType : null,
   );
-
-  const content = providedContent ?? fetchedContent;
+  const content =
+    providedContent && isContentDetail(providedContent)
+      ? providedContent
+      : fetchedContent;
   const addToWatchlist = useAddToWatchlist();
 
   const [selectedMoods, setSelectedMoods] = useState<MoodId[]>(

@@ -4,10 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getMovieDetail, getTvDetail } from '@/lib/tmdb';
 
-import type { Content, ContentType } from '@/types';
+import type { ContentDetail, ContentType } from '@/types';
 
 interface UseContentDetailResult {
-  content: Content | null;
+  content: ContentDetail | null;
   isLoading: boolean;
   error: Error | null;
 }

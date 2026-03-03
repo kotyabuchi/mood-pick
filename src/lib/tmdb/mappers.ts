@@ -1,4 +1,10 @@
-import type { AttentionLevelId, Content, ContentType, MoodId } from '@/types';
+import type {
+  AttentionLevelId,
+  Content,
+  ContentDetail,
+  ContentType,
+  MoodId,
+} from '@/types';
 import type {
   TmdbMovieDetail,
   TmdbSearchMovieResult,
@@ -95,8 +101,6 @@ export function mapSearchMovieToContent(item: TmdbSearchMovieResult): Content {
     type: 'movie',
     posterUrl: buildPosterUrl(item.poster_path),
     year,
-    genre: '',
-    runtime: 0,
     synopsis: item.overview,
     moodTags: genreIdsToMoodTags(item.genre_ids),
     attentionLevel: 'focused',
@@ -116,8 +120,6 @@ export function mapSearchTvToContent(item: TmdbSearchTvResult): Content {
     type: isAnime ? 'anime' : 'tv',
     posterUrl: buildPosterUrl(item.poster_path),
     year,
-    genre: '',
-    runtime: 0,
     synopsis: item.overview,
     moodTags: genreIdsToMoodTags(item.genre_ids),
     attentionLevel: 'casual',
@@ -125,7 +127,7 @@ export function mapSearchTvToContent(item: TmdbSearchTvResult): Content {
   };
 }
 
-export function mapMovieDetailToContent(movie: TmdbMovieDetail): Content {
+export function mapMovieDetailToContent(movie: TmdbMovieDetail): ContentDetail {
   const year = movie.release_date
     ? parseInt(movie.release_date.slice(0, 4), 10)
     : 0;
@@ -148,7 +150,7 @@ export function mapMovieDetailToContent(movie: TmdbMovieDetail): Content {
   };
 }
 
-export function mapTvDetailToContent(tv: TmdbTvDetail): Content {
+export function mapTvDetailToContent(tv: TmdbTvDetail): ContentDetail {
   const year = tv.first_air_date
     ? parseInt(tv.first_air_date.slice(0, 4), 10)
     : 0;

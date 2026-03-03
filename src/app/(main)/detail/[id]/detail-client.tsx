@@ -193,7 +193,9 @@ export function DetailClient({ tmdbId, contentType }: DetailClientProps) {
           <h1 className="text-2xl font-bold text-text-primary">{item.title}</h1>
 
           <p className="text-xs text-text-secondary mt-1">
-            {item.year} · {item.genre} · {item.runtime}分
+            {[item.year, item.genre, item.runtime ? `${item.runtime}分` : null]
+              .filter(Boolean)
+              .join(' · ')}
           </p>
 
           {/* 配信サービスバッジ */}

@@ -30,15 +30,18 @@ export interface Content {
   type: ContentType;
   posterUrl: string;
   year: number;
-  genre: string;
-  runtime: number;
   synopsis: string;
   moodTags: MoodId[];
   attentionLevel: AttentionLevelId;
   streaming: StreamingInfo[];
 }
 
-export interface WatchlistItem extends Content {
+export interface ContentDetail extends Content {
+  genre: string;
+  runtime: number;
+}
+
+export interface WatchlistItem extends ContentDetail {
   watchlistId: string;
   status: WatchStatus;
   memo: string | null;
@@ -79,7 +82,7 @@ export interface FeedItem {
   id: string;
   user: User;
   actionType: FeedActionType;
-  content: Content;
+  content: ContentDetail;
   timestamp: string;
   rating?: number;
   review?: string;

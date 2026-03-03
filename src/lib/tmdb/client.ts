@@ -5,7 +5,7 @@ import {
   mapTvDetailToContent,
 } from './mappers';
 
-import type { Content } from '@/types';
+import type { Content, ContentDetail } from '@/types';
 import type {
   TmdbMovieDetail,
   TmdbPaginatedResponse,
@@ -65,7 +65,7 @@ export async function searchMulti(
 export async function getMovieDetail(
   movieId: number,
   signal?: AbortSignal,
-): Promise<Content> {
+): Promise<ContentDetail> {
   const data = await tmdbRouteHandlerFetch<TmdbMovieDetail>(
     `/api/tmdb/movie/${movieId}`,
     signal,
@@ -79,7 +79,7 @@ export async function getMovieDetail(
 export async function getTvDetail(
   tvId: number,
   signal?: AbortSignal,
-): Promise<Content> {
+): Promise<ContentDetail> {
   const data = await tmdbRouteHandlerFetch<TmdbTvDetail>(
     `/api/tmdb/tv/${tvId}`,
     signal,

@@ -1,6 +1,6 @@
 import type {
   AttentionLevelId,
-  Content,
+  ContentDetail,
   ContentType,
   MoodId,
   WatchlistItem,
@@ -39,7 +39,7 @@ export function parseTmdbIdFromContentId(contentId: string): number | null {
 }
 
 export function mapContentToInsertRow(
-  content: Content,
+  content: ContentDetail,
   status: WatchStatus = 'want',
 ): WatchlistItemInsert {
   return {

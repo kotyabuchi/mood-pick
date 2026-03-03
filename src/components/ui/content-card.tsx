@@ -10,10 +10,15 @@ import { UrgencyBadge } from './urgency-badge';
 
 import { cn } from '@/lib/cn';
 
-import type { Content, SearchResult, WatchlistItem } from '@/types';
+import type {
+  Content,
+  ContentDetail,
+  SearchResult,
+  WatchlistItem,
+} from '@/types';
 
 interface ContentCardProps {
-  item: WatchlistItem | Content | SearchResult;
+  item: WatchlistItem | Content | ContentDetail | SearchResult;
   variant: 'horizontal' | 'poster' | 'list-item';
   href?: string;
   showExpiration?: boolean;
@@ -62,7 +67,15 @@ function ContentCardInner({
                 {item.title}
               </h3>
               <p className="text-xs text-text-secondary mt-0.5">
-                {[item.genre, item.runtime ? `${item.runtime}分` : null, item.year ? `${item.year}年` : null].filter(Boolean).join(' · ')}
+                {[
+                  'genre' in item && item.genre,
+                  'runtime' in item && item.runtime
+                    ? `${item.runtime}分`
+                    : null,
+                  item.year ? `${item.year}年` : null,
+                ]
+                  .filter(Boolean)
+                  .join(' · ')}
               </p>
               {item.streaming[0] && (
                 <div className="mt-1">
@@ -142,7 +155,13 @@ function ContentCardInner({
             {item.title}
           </h3>
           <p className="text-xs text-text-secondary mt-0.5">
-            {[item.genre, item.runtime ? `${item.runtime}分` : null, item.year ? `${item.year}年` : null].filter(Boolean).join(' · ')}
+            {[
+              'genre' in item && item.genre,
+              'runtime' in item && item.runtime ? `${item.runtime}分` : null,
+              item.year ? `${item.year}年` : null,
+            ]
+              .filter(Boolean)
+              .join(' · ')}
           </p>
         </div>
       </Link>

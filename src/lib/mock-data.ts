@@ -2,7 +2,7 @@ import { daysFromNow } from './utils';
 
 import type {
   AttentionLevelId,
-  Content,
+  ContentDetail,
   DurationId,
   FeedItem,
   MoodId,
@@ -14,7 +14,7 @@ import type {
 } from '@/types';
 
 // === Contents (15作品) ===
-export const mockContents: Content[] = [
+export const mockContents: ContentDetail[] = [
   {
     id: 'c-1',
     tmdbId: 872585,
@@ -352,7 +352,7 @@ export const mockContents: Content[] = [
 
 // === Watchlist Items (20件) ===
 function createWatchlistItem(
-  content: Content,
+  content: ContentDetail,
   overrides: Partial<WatchlistItem>,
 ): WatchlistItem {
   return {
