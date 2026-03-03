@@ -62,7 +62,7 @@ function ContentCardInner({
                 {item.title}
               </h3>
               <p className="text-xs text-text-secondary mt-0.5">
-                {item.genre} · {item.runtime}分
+                {[item.genre, item.runtime ? `${item.runtime}分` : null, item.year ? `${item.year}年` : null].filter(Boolean).join(' · ')}
               </p>
               {item.streaming[0] && (
                 <div className="mt-1">
@@ -142,7 +142,7 @@ function ContentCardInner({
             {item.title}
           </h3>
           <p className="text-xs text-text-secondary mt-0.5">
-            {item.genre} · {item.runtime}分
+            {[item.genre, item.runtime ? `${item.runtime}分` : null, item.year ? `${item.year}年` : null].filter(Boolean).join(' · ')}
           </p>
         </div>
       </Link>

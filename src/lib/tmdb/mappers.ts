@@ -7,7 +7,7 @@ import type {
 } from '@/types/tmdb';
 
 const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
-const PLACEHOLDER_POSTER = 'https://via.placeholder.com/500x750?text=No+Image';
+const PLACEHOLDER_POSTER = '/no-poster.svg';
 
 const GENRE_MOOD_MAP: Record<number, MoodId[]> = {
   28: ['excited'],
