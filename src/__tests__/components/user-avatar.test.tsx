@@ -3,10 +3,6 @@ import { describe, expect, it } from 'vitest';
 
 import { UserAvatar } from '@/components/ui/user-avatar';
 
-vi.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: any) => <img src={src} alt={alt ?? ''} {...props} />,
-}));
-
 describe('UserAvatar', () => {
   it('URIがある場合、画像を表示する', () => {
     render(<UserAvatar uri="https://example.com/avatar.jpg" name="田中太郎" />);

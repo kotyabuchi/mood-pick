@@ -5,18 +5,6 @@ import { ContentCard } from '@/components/ui/content-card';
 
 import type { Content, WatchlistItem } from '@/types';
 
-vi.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: any) => <img src={src} alt={alt ?? ''} {...props} />,
-}));
-
-vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-}));
-
 const mockContent: Content = {
   id: 'c-1',
   tmdbId: 12345,

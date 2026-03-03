@@ -10,14 +10,6 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/',
 }));
 
-vi.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: any) => <img src={src} alt={alt ?? ''} {...props} />,
-}));
-
-vi.mock('next/link', () => ({
-  default: ({ children, ...props }: any) => <a {...props}>{children}</a>,
-}));
-
 vi.mock('@/context/auth-context', () => ({
   useAuth: () => ({
     user: { id: 'test', email: 'test@test.com' },

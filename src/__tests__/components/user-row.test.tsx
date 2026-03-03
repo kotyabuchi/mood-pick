@@ -5,10 +5,6 @@ import { UserRow } from '@/components/ui/user-row';
 
 import type { User } from '@/types';
 
-vi.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: any) => <img src={src} alt={alt ?? ''} {...props} />,
-}));
-
 const mockUser: User = {
   id: 'u-1',
   name: '田中太郎',
