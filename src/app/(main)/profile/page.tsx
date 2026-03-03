@@ -7,6 +7,7 @@ import { ContentCard } from '@/components/ui/content-card';
 import { HorizontalCarousel } from '@/components/ui/horizontal-carousel';
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { UserAvatar } from '@/components/ui/user-avatar';
+import { useFollowCounts } from '@/hooks/use-follows';
 import { useWatchlist, useWatchlistStats } from '@/hooks/use-watchlist';
 import { mockCurrentUser } from '@/lib/mock-data';
 
@@ -14,6 +15,7 @@ export default function ProfilePage() {
   const user = mockCurrentUser;
   const { data: stats } = useWatchlistStats();
   const { data: watchedItems = [] } = useWatchlist('watched');
+  const { data: followCounts } = useFollowCounts(user.id);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -37,10 +39,16 @@ export default function ProfilePage() {
         <Link href="/follows" className="block">
           <div className="flex justify-center mb-4 gap-4">
             <p className="text-sm text-text-primary">
-              <span className="font-bold">{user.followingCount}</span> フォロー
+              <span className="font-bold">
+                {followCounts?.followingCount ?? user.followingCount}
+              </span>{' '}
+              フォロー
             </p>
             <p className="text-sm text-text-primary">
-              <span className="font-bold">{user.followerCount}</span> フォロワー
+              <span className="font-bold">
+                {followCounts?.followerCount ?? user.followerCount}
+              </span>{' '}
+              フォロワー
             </p>
           </div>
         </Link>

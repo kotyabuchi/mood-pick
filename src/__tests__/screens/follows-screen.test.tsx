@@ -4,6 +4,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import FollowsPage from '@/app/(main)/follows/page';
 
+import type { User } from '@/types';
+
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), back: vi.fn() }),
   useParams: () => ({}),
@@ -15,6 +17,83 @@ vi.mock('@/context/auth-context', () => ({
   useAuth: () => ({
     user: { id: 'test', email: 'test@test.com' },
     signOut: vi.fn(),
+  }),
+}));
+
+const mockFollowing: User[] = [
+  {
+    id: 'u-1',
+    name: '田中太郎',
+    handle: 'taro_tanaka',
+    avatarUrl: null,
+    followingCount: 0,
+    followerCount: 0,
+    isFollowing: true,
+  },
+  {
+    id: 'u-2',
+    name: '鈴木花子',
+    handle: 'hanako_suzuki',
+    avatarUrl: null,
+    followingCount: 0,
+    followerCount: 0,
+    isFollowing: true,
+  },
+  {
+    id: 'u-3',
+    name: '佐藤健',
+    handle: 'ken_sato',
+    avatarUrl: null,
+    followingCount: 0,
+    followerCount: 0,
+    isFollowing: true,
+  },
+  {
+    id: 'u-4',
+    name: '山田優',
+    handle: 'yu_yamada',
+    avatarUrl: null,
+    followingCount: 0,
+    followerCount: 0,
+    isFollowing: true,
+  },
+];
+
+const mockFollowers: User[] = [
+  ...mockFollowing,
+  {
+    id: 'u-5',
+    name: '高橋大輝',
+    handle: 'daiki_t',
+    avatarUrl: null,
+    followingCount: 0,
+    followerCount: 0,
+    isFollowing: false,
+  },
+  {
+    id: 'u-6',
+    name: '伊藤美咲',
+    handle: 'misaki_ito',
+    avatarUrl: null,
+    followingCount: 0,
+    followerCount: 0,
+    isFollowing: false,
+  },
+];
+
+vi.mock('@/hooks/use-follows', () => ({
+  useFollowing: () => ({ data: mockFollowing, isLoading: false }),
+  useFollowers: () => ({ data: mockFollowers, isLoading: false }),
+  useFollowCounts: () => ({
+    data: { followingCount: 4, followerCount: 6 },
+  }),
+  useIsFollowing: () => ({ data: false }),
+}));
+
+vi.mock('@/hooks/use-follow-mutations', () => ({
+  useToggleFollow: () => ({
+    mutate: vi.fn(),
+    isPending: false,
   }),
 }));
 

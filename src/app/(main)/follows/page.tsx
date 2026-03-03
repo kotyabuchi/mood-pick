@@ -1,13 +1,15 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
+import { Loader2, Users } from 'lucide-react';
 
+import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { TabBarSegment } from '@/components/ui/tab-bar-segment';
 import { UserRow } from '@/components/ui/user-row';
-import { mockUsers } from '@/lib/mock-data';
-
-import type { User } from '@/types';
+import { useAuth } from '@/context/auth-context';
+import { useToggleFollow } from '@/hooks/use-follow-mutations';
+import { useFollowers, useFollowing } from '@/hooks/use-follows';
 
 const TABS = [
   { id: 'following', label: 'フォロー' },
@@ -15,23 +17,21 @@ const TABS = [
 ];
 
 export default function FollowsPage() {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('following');
-  const [users, setUsers] = useState<User[]>(mockUsers);
 
-  const filteredUsers = useMemo(() => {
-    if (activeTab === 'following') {
-      return users.filter((u) => u.isFollowing);
-    }
-    return users;
-  }, [activeTab, users]);
+  const { data: following = [], isLoading: isLoadingFollowing } = useFollowing(
+    user?.id,
+  );
+  const { data: followers = [], isLoading: isLoadingFollowers } = useFollowers(
+    user?.id,
+  );
 
-  const handleFollowToggle = useCallback((userId: string) => {
-    setUsers((prev) =>
-      prev.map((u) =>
-        u.id === userId ? { ...u, isFollowing: !u.isFollowing } : u,
-      ),
-    );
-  }, []);
+  const toggleFollow = useToggleFollow();
+
+  const users = activeTab === 'following' ? following : followers;
+  const isLoading =
+    activeTab === 'following' ? isLoadingFollowing : isLoadingFollowers;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -46,14 +46,39 @@ export default function FollowsPage() {
       </div>
 
       <div className="pb-8">
-        {filteredUsers.map((user) => (
-          <UserRow
-            key={user.id}
-            user={user}
-            showFollowButton
-            onFollowToggle={() => handleFollowToggle(user.id)}
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <Loader2 className="size-6 animate-spin text-text-secondary" />
+          </div>
+        ) : users.length === 0 ? (
+          <EmptyState
+            icon={Users}
+            title={
+              activeTab === 'following'
+                ? 'まだ誰もフォローしていません'
+                : 'まだフォロワーがいません'
+            }
+            description={
+              activeTab === 'following'
+                ? '気になるユーザーをフォローしてみましょう'
+                : '他のユーザーにフォローされるとここに表示されます'
+            }
           />
-        ))}
+        ) : (
+          users.map((u) => (
+            <UserRow
+              key={u.id}
+              user={u}
+              showFollowButton={u.id !== user?.id}
+              onFollowToggle={() =>
+                toggleFollow.mutate({
+                  targetId: u.id,
+                  isCurrentlyFollowing: u.isFollowing ?? false,
+                })
+              }
+            />
+          ))
+        )}
       </div>
     </div>
   );
