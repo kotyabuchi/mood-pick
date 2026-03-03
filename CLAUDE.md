@@ -103,6 +103,18 @@ Tailwind v4 `@theme` 変数を使用 (`src/app/globals.css`):
 
 コア型は `src/types/index.ts` に集約。DB生成型は `src/types/database.ts`、TMDb型は `src/types/tmdb.ts`。
 
+### Quality Checks
+
+実装の各 Batch 完了時に以下を**必ず**実行すること。スキップ禁止。
+
+1. `pnpm check` — Biome lint + format
+2. `npx react-doctor --diff main --verbose` — React ベストプラクティス検証
+3. `/codex-debate` — Codex CLI とのクロスレビュー（指摘があれば修正してから次の Batch へ）
+4. `pnpm build` — TypeScript 型チェック + ビルド
+5. `pnpm test` — 全テスト実行
+
+レポートは `docs/reviews/` に出力される。
+
 ### Progress Tracking
 
 実装の進捗は `PROGRESS.md` で管理。タスクの着手・完了時に更新すること。新機能は Phase 順に進め、既存の `src/lib/watchlist/` パターン (DI + React Query) を踏襲。
