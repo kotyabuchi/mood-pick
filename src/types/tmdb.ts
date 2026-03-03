@@ -73,9 +73,3 @@ export interface TmdbTvDetail {
   number_of_seasons: number;
   number_of_episodes: number;
 }
-
-/** APIエラー */
-export interface TmdbApiError {
-  status_code: number;
-  status_message: string;
-}

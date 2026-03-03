@@ -11,11 +11,12 @@ export type StreamingService =
   | 'u-next'
   | 'hulu'
   | 'abema';
-export type PrivacySetting = 'private' | 'followers' | 'public';
-export type NotificationType = 'expiring' | 'follow' | 'recommendation';
 export type FeedActionType = 'watched' | 'watching' | 'want' | 'recommend';
+export type NotificationType = 'expiring' | 'follow' | 'recommendation';
 
-// === Interfaces ===
+// === Domain Types ===
+// TMDb + アプリ固有の構造。DB型 (database.ts) とは Mapper 経由で変換する。
+
 export interface StreamingInfo {
   service: StreamingService;
   expiresAt: string | null;
@@ -46,6 +47,10 @@ export interface WatchlistItem extends Content {
   watchedAt: string | null;
   droppedAt: string | null;
   createdAt: string;
+}
+
+export interface SearchResult extends Content {
+  isInWatchlist: boolean;
 }
 
 export interface User {
@@ -91,26 +96,6 @@ export interface Notification {
   serviceName?: string;
 }
 
-export interface SearchResult extends Content {
-  isInWatchlist: boolean;
-}
-
-export interface PrivacySettings {
-  wantListVisibility: PrivacySetting;
-  watchedListVisibility: PrivacySetting;
-  activityVisibility: PrivacySetting;
-}
-
-export interface NotificationSettings {
-  expirationAlert: boolean;
-  expirationAlert7Days: boolean;
-  expirationAlert3Days: boolean;
-  expirationAlertPreviousDay: boolean;
-  followNotification: boolean;
-  recommendationNotification: boolean;
-}
-
-// === Auth Types ===
 export interface AuthUser {
   id: string;
   email: string;

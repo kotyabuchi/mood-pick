@@ -7,79 +7,126 @@ export type Json =
   | Json[];
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never;
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
+        Returns: Json;
+      };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
   public: {
     Tables: {
       profiles: {
         Row: {
-          id: string;
-          name: string;
-          handle: string | null;
           avatar_url: string | null;
           created_at: string;
+          handle: string | null;
+          id: string;
+          name: string;
           updated_at: string;
         };
         Insert: {
+          avatar_url?: string | null;
+          created_at?: string;
+          handle?: string | null;
           id: string;
           name?: string;
-          handle?: string | null;
-          avatar_url?: string | null;
+          updated_at?: string;
         };
         Update: {
-          name?: string;
-          handle?: string | null;
           avatar_url?: string | null;
+          created_at?: string;
+          handle?: string | null;
+          id?: string;
+          name?: string;
+          updated_at?: string;
         };
         Relationships: [];
       };
       watchlist_items: {
         Row: {
-          id: string;
-          user_id: string;
-          tmdb_id: number;
-          title: string;
-          type: 'movie' | 'tv' | 'anime';
-          poster_url: string;
-          year: number;
+          attention_level: string;
+          created_at: string;
+          dropped_at: string | null;
           genre: string;
-          runtime: number;
-          synopsis: string;
-          mood_tags: string[];
-          attention_level: 'focused' | 'casual';
-          status: 'want' | 'watching' | 'watched' | 'dropped';
+          id: string;
           memo: string | null;
+          mood_tags: string[];
+          poster_url: string;
           rating: number | null;
           review: string | null;
-          watched_at: string | null;
-          dropped_at: string | null;
-          created_at: string;
+          runtime: number;
+          status: string;
+          synopsis: string;
+          title: string;
+          tmdb_id: number;
+          type: string;
           updated_at: string;
+          user_id: string;
+          watched_at: string | null;
+          year: number;
         };
         Insert: {
-          user_id?: string;
-          tmdb_id: number;
-          title: string;
-          type: 'movie' | 'tv' | 'anime';
-          poster_url?: string;
-          year?: number;
+          attention_level?: string;
+          created_at?: string;
+          dropped_at?: string | null;
           genre?: string;
-          runtime?: number;
-          synopsis?: string;
-          mood_tags?: string[];
-          attention_level?: 'focused' | 'casual';
-          status?: 'want' | 'watching' | 'watched' | 'dropped';
+          id?: string;
           memo?: string | null;
+          mood_tags?: string[];
+          poster_url?: string;
           rating?: number | null;
           review?: string | null;
+          runtime?: number;
+          status?: string;
+          synopsis?: string;
+          title: string;
+          tmdb_id: number;
+          type: string;
+          updated_at?: string;
+          user_id?: string;
           watched_at?: string | null;
-          dropped_at?: string | null;
+          year?: number;
         };
         Update: {
-          status?: 'want' | 'watching' | 'watched' | 'dropped';
+          attention_level?: string;
+          created_at?: string;
+          dropped_at?: string | null;
+          genre?: string;
+          id?: string;
           memo?: string | null;
+          mood_tags?: string[];
+          poster_url?: string;
           rating?: number | null;
           review?: string | null;
+          runtime?: number;
+          status?: string;
+          synopsis?: string;
+          title?: string;
+          tmdb_id?: number;
+          type?: string;
+          updated_at?: string;
+          user_id?: string;
           watched_at?: string | null;
-          dropped_at?: string | null;
+          year?: number;
         };
         Relationships: [
           {
