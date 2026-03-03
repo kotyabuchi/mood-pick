@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(supabase init:*)",
+      "Bash(supabase projects:*)",
+      "Bash(supabase status:*)",
+      "Bash(supabase migration:*)",
+      "Bash(supabase gen:*)",
+      "Bash(pnpm test:*)"
+    ]
+  }
+}
