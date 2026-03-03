@@ -1,0 +1,153 @@
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
+import { Loader2, X } from 'lucide-react';
+
+import { MoodChip } from './mood-chip';
+
+import { Moods } from '@/constants/theme';
+import { useContentDetail } from '@/hooks/use-content-detail';
+import { useAddToWatchlist } from '@/hooks/use-watchlist-mutations';
+
+import type { Content, ContentType, MoodId } from '@/types';
+
+interface AddToWatchlistDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  content?: Content | null;
+  tmdbId?: number | null;
+  contentType?: ContentType | null;
+}
+
+export function AddToWatchlistDialog({
+  open,
+  onOpenChange,
+  content: providedContent,
+  tmdbId,
+  contentType,
+}: AddToWatchlistDialogProps) {
+  const { content: fetchedContent, isLoading } = useContentDetail(
+    providedContent ? null : (tmdbId ?? null),
+    providedContent ? null : (contentType ?? null),
+  );
+
+  const content = providedContent ?? fetchedContent;
+  const addToWatchlist = useAddToWatchlist();
+
+  const [selectedMoods, setSelectedMoods] = useState<MoodId[]>(
+    content?.moodTags ?? [],
+  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (open && content?.moodTags) {
+      setSelectedMoods(content.moodTags);
+      setError(null);
+    }
+  }, [open, content]);
+
+  const handleMoodToggle = useCallback((moodId: MoodId) => {
+    setSelectedMoods((prev) =>
+      prev.includes(moodId)
+        ? prev.filter((m) => m !== moodId)
+        : [...prev, moodId],
+    );
+  }, []);
+
+  const handleAdd = useCallback(async () => {
+    if (!content) return;
+
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      await addToWatchlist.mutateAsync({
+        content: { ...content, moodTags: selectedMoods },
+        status: 'want',
+      });
+      onOpenChange(false);
+    } catch {
+      setError('追加に失敗しました。もう一度お試しください。');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [content, selectedMoods, addToWatchlist, onOpenChange]);
+
+  return (
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 bg-black/60 data-[state=open]:animate-in data-[state=open]:fade-in data-[state=closed]:animate-out data-[state=closed]:fade-out" />
+        <Dialog.Content className="fixed bottom-0 left-0 right-0 lg:bottom-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:max-w-md lg:rounded-xl bg-surface rounded-t-2xl px-6 pt-6 pb-8 data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom lg:data-[state=open]:slide-in-from-bottom-0 lg:data-[state=open]:fade-in">
+          <Dialog.Close className="absolute top-4 right-4 text-text-secondary hover:text-text-primary">
+            <X size={20} />
+          </Dialog.Close>
+
+          {isLoading ? (
+            <div className="flex justify-center py-8">
+              <Loader2
+                size={32}
+                className="animate-spin text-accent"
+                data-testid="loading-indicator"
+              />
+            </div>
+          ) : !content ? (
+            <div className="text-center py-8">
+              <p className="text-text-secondary">作品が見つかりません</p>
+            </div>
+          ) : (
+            <>
+              <Dialog.Title className="text-lg font-bold text-text-primary mb-2 text-center">
+                「見たい」に追加
+              </Dialog.Title>
+              <Dialog.Description className="text-xs text-text-secondary mb-4 text-center">
+                {content.title}
+              </Dialog.Description>
+
+              <p className="text-xs font-semibold text-text-secondary mb-2">
+                気分タグ
+              </p>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {Moods.map((mood) => (
+                  <MoodChip
+                    key={mood.id}
+                    mood={{
+                      id: mood.id,
+                      emoji: mood.emoji,
+                      label: mood.shortLabel,
+                    }}
+                    selected={selectedMoods.includes(mood.id as MoodId)}
+                    onPress={() => handleMoodToggle(mood.id as MoodId)}
+                  />
+                ))}
+              </div>
+
+              {error && (
+                <p className="text-xs text-error text-center mb-3">{error}</p>
+              )}
+
+              <div className="flex gap-3">
+                <Dialog.Close asChild>
+                  <button
+                    type="button"
+                    className="flex-1 py-3 rounded-lg border border-border text-sm font-semibold text-text-secondary hover:bg-surface-light transition-colors"
+                  >
+                    キャンセル
+                  </button>
+                </Dialog.Close>
+                <button
+                  type="button"
+                  onClick={handleAdd}
+                  disabled={isSubmitting}
+                  className="flex-1 py-3 rounded-lg bg-accent text-sm font-semibold text-white hover:bg-accent-hover transition-colors disabled:opacity-50"
+                >
+                  {isSubmitting ? '追加中...' : '追加する'}
+                </button>
+              </div>
+            </>
+          )}
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
+}
