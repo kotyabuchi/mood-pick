@@ -1,38 +1,60 @@
 'use client';
 
-import { Settings } from 'lucide-react';
+import { Loader2, Settings } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { ContentCard } from '@/components/ui/content-card';
 import { HorizontalCarousel } from '@/components/ui/horizontal-carousel';
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { UserAvatar } from '@/components/ui/user-avatar';
+import { useAuth } from '@/context/auth-context';
 import { useFollowCounts } from '@/hooks/use-follows';
+import { useOwnProfile } from '@/hooks/use-profile';
+import { useTimedWatchStats } from '@/hooks/use-timed-watch-stats';
 import { useWatchlist, useWatchlistStats } from '@/hooks/use-watchlist';
-import { mockCurrentUser } from '@/lib/mock-data';
 
 export default function ProfilePage() {
-  const user = mockCurrentUser;
+  const router = useRouter();
+  const { user } = useAuth();
+  const { data: profile, isLoading: profileLoading } = useOwnProfile();
   const { data: stats } = useWatchlistStats();
+  const { data: timedStats } = useTimedWatchStats();
   const { data: watchedItems = [] } = useWatchlist('watched');
-  const { data: followCounts } = useFollowCounts(user.id);
+  const { data: followCounts } = useFollowCounts(user?.id);
+
+  if (profileLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader2 size={32} className="animate-spin text-accent" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
       <ScreenHeader
         title="プロフィール"
         rightIcon={Settings}
-        onRightPress={() => {}}
+        onRightPress={() => router.push('/settings')}
       />
 
       <div className="pb-8">
         {/* Avatar + Name */}
         <div className="flex flex-col items-center mt-4 mb-3">
-          <UserAvatar uri={user.avatarUrl} name={user.name} size={80} />
+          <UserAvatar
+            uri={profile?.avatar_url}
+            name={profile?.name}
+            size={80}
+          />
           <h2 className="text-xl font-bold text-text-primary mt-3">
-            {user.name}
+            {profile?.name ?? '名前未設定'}
           </h2>
-          <p className="text-sm text-text-secondary mt-0.5">@{user.handle}</p>
+          {profile?.handle && (
+            <p className="text-sm text-text-secondary mt-0.5">
+              @{profile.handle}
+            </p>
+          )}
         </div>
 
         {/* Follow counts */}
@@ -40,13 +62,13 @@ export default function ProfilePage() {
           <div className="flex justify-center mb-4 gap-4">
             <p className="text-sm text-text-primary">
               <span className="font-bold">
-                {followCounts?.followingCount ?? user.followingCount}
+                {followCounts?.followingCount ?? 0}
               </span>{' '}
               フォロー
             </p>
             <p className="text-sm text-text-primary">
               <span className="font-bold">
-                {followCounts?.followerCount ?? user.followerCount}
+                {followCounts?.followerCount ?? 0}
               </span>{' '}
               フォロワー
             </p>
@@ -79,13 +101,13 @@ export default function ProfilePage() {
             <p className="text-xs text-text-secondary">
               今月:{' '}
               <span className="text-text-primary font-bold">
-                {user.stats.thisMonth}本
+                {timedStats?.thisMonth ?? 0}本
               </span>
             </p>
             <p className="text-xs text-text-secondary">
               今年:{' '}
               <span className="text-text-primary font-bold">
-                {user.stats.thisYear}本
+                {timedStats?.thisYear ?? 0}本
               </span>
             </p>
           </div>

@@ -13,6 +13,7 @@ interface AuthInputProps {
   type?: 'text' | 'email' | 'password';
   placeholder?: string;
   autoComplete?: string;
+  maxLength?: number;
 }
 
 export function AuthInput({
@@ -23,6 +24,7 @@ export function AuthInput({
   type = 'text',
   placeholder,
   autoComplete,
+  maxLength,
 }: AuthInputProps) {
   const id = useId();
   const [showPassword, setShowPassword] = useState(false);
@@ -43,6 +45,7 @@ export function AuthInput({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           autoComplete={autoComplete}
+          maxLength={maxLength}
           className={cn(
             'w-full bg-surface-light rounded-lg px-4 py-3 text-text-primary text-sm',
             'placeholder:text-text-disabled',

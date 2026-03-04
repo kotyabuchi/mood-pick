@@ -7,4 +7,5 @@ export const watchlistKeys = {
     [...watchlistKeys.lists(), { status }] as const,
   detail: (tmdbId: number) => [...watchlistKeys.all, 'detail', tmdbId] as const,
   stats: () => [...watchlistKeys.all, 'stats'] as const,
+  timedStats: () => [...watchlistKeys.all, 'timedStats'] as const,
 };

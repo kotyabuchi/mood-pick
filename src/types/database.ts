@@ -39,6 +39,75 @@ export type Database = {
   };
   public: {
     Tables: {
+      activity_log: {
+        Row: {
+          action_type: string;
+          content_type: string;
+          created_at: string;
+          genre: string;
+          id: string;
+          message: string | null;
+          poster_url: string;
+          rating: number | null;
+          recipient_id: string | null;
+          review: string | null;
+          runtime: number;
+          title: string;
+          tmdb_id: number;
+          user_id: string;
+          year: number;
+        };
+        Insert: {
+          action_type: string;
+          content_type: string;
+          created_at?: string;
+          genre?: string;
+          id?: string;
+          message?: string | null;
+          poster_url: string;
+          rating?: number | null;
+          recipient_id?: string | null;
+          review?: string | null;
+          runtime?: number;
+          title: string;
+          tmdb_id: number;
+          user_id: string;
+          year?: number;
+        };
+        Update: {
+          action_type?: string;
+          content_type?: string;
+          created_at?: string;
+          genre?: string;
+          id?: string;
+          message?: string | null;
+          poster_url?: string;
+          rating?: number | null;
+          recipient_id?: string | null;
+          review?: string | null;
+          runtime?: number;
+          title?: string;
+          tmdb_id?: number;
+          user_id?: string;
+          year?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'activity_log_recipient_id_fkey';
+            columns: ['recipient_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'activity_log_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       follows: {
         Row: {
           created_at: string;
@@ -66,6 +135,47 @@ export type Database = {
           {
             foreignKeyName: 'follows_following_id_fkey';
             columns: ['following_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      notifications: {
+        Row: {
+          created_at: string;
+          id: string;
+          is_read: boolean;
+          service_name: string | null;
+          target_id: string;
+          title: string;
+          type: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          is_read?: boolean;
+          service_name?: string | null;
+          target_id: string;
+          title: string;
+          type: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          is_read?: boolean;
+          service_name?: string | null;
+          target_id?: string;
+          title?: string;
+          type?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'notifications_user_id_fkey';
+            columns: ['user_id'];
             isOneToOne: false;
             referencedRelation: 'profiles';
             referencedColumns: ['id'];
@@ -312,21 +422,6 @@ export type CompositeTypes<
     ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
     : never;
 
-// === Table-specific type aliases ===
-
-type PublicSchema = Database['public'];
-
-export type WatchlistItemRow = PublicSchema['Tables']['watchlist_items']['Row'];
-export type WatchlistItemInsert =
-  PublicSchema['Tables']['watchlist_items']['Insert'];
-export type WatchlistItemUpdate =
-  PublicSchema['Tables']['watchlist_items']['Update'];
-
-export type ProfileRow = PublicSchema['Tables']['profiles']['Row'];
-
-export type FollowsRow = PublicSchema['Tables']['follows']['Row'];
-export type FollowsInsert = PublicSchema['Tables']['follows']['Insert'];
-
 export const Constants = {
   graphql_public: {
     Enums: {},
@@ -335,3 +430,22 @@ export const Constants = {
     Enums: {},
   },
 } as const;
+
+// ============================================================
+// Type aliases
+// ============================================================
+type PublicSchema = Database['public'];
+
+export type ActivityLogRow = PublicSchema['Tables']['activity_log']['Row'];
+export type WatchlistItemRow = PublicSchema['Tables']['watchlist_items']['Row'];
+export type WatchlistItemInsert =
+  PublicSchema['Tables']['watchlist_items']['Insert'];
+export type WatchlistItemUpdate =
+  PublicSchema['Tables']['watchlist_items']['Update'];
+export type ProfileRow = PublicSchema['Tables']['profiles']['Row'];
+export type ProfileUpdate = PublicSchema['Tables']['profiles']['Update'];
+export type FollowsRow = PublicSchema['Tables']['follows']['Row'];
+export type FollowsInsert = PublicSchema['Tables']['follows']['Insert'];
+export type NotificationRow = PublicSchema['Tables']['notifications']['Row'];
+export type NotificationUpdate =
+  PublicSchema['Tables']['notifications']['Update'];

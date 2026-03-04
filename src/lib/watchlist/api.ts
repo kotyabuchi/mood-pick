@@ -125,6 +125,40 @@ export function createWatchlistApi(client: SupabaseClient<Database>) {
     };
   }
 
+  async function fetchTimedWatchStats(): Promise<{
+    thisMonth: number;
+    thisYear: number;
+  }> {
+    const now = new Date();
+    const startOfMonth = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1,
+    ).toISOString();
+    const startOfYear = new Date(now.getFullYear(), 0, 1).toISOString();
+
+    const [monthResult, yearResult] = await Promise.all([
+      client
+        .from('watchlist_items')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'watched')
+        .gte('watched_at', startOfMonth),
+      client
+        .from('watchlist_items')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'watched')
+        .gte('watched_at', startOfYear),
+    ]);
+
+    if (monthResult.error) throw monthResult.error;
+    if (yearResult.error) throw yearResult.error;
+
+    return {
+      thisMonth: monthResult.count ?? 0,
+      thisYear: yearResult.count ?? 0,
+    };
+  }
+
   return {
     fetchWatchlist,
     fetchWatchlistItem,
@@ -132,5 +166,6 @@ export function createWatchlistApi(client: SupabaseClient<Database>) {
     updateWatchlistItem,
     removeWatchlistItem,
     fetchWatchlistStats,
+    fetchTimedWatchStats,
   };
 }

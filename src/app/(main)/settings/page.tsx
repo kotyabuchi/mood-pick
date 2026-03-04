@@ -4,12 +4,14 @@ import { useState } from 'react';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import * as Switch from '@radix-ui/react-switch';
 import { ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { SectionDivider } from '@/components/ui/section-divider';
 import { useAuth } from '@/context/auth-context';
 
 export default function SettingsPage() {
+  const router = useRouter();
   const { signOut } = useAuth();
 
   const [expirationAlert, setExpirationAlert] = useState(true);
@@ -26,7 +28,10 @@ export default function SettingsPage() {
       <div className="pb-10">
         {/* アカウント */}
         <SectionDivider label="アカウント" />
-        <SettingRow label="プロフィール編集" />
+        <SettingRow
+          label="プロフィール編集"
+          onPress={() => router.push('/profile/edit')}
+        />
         <SettingRow label="メールアドレス変更" />
         <SettingRow label="パスワード変更" />
 
@@ -132,10 +137,17 @@ export default function SettingsPage() {
   );
 }
 
-function SettingRow({ label }: { label: string }) {
+function SettingRow({
+  label,
+  onPress,
+}: {
+  label: string;
+  onPress?: () => void;
+}) {
   return (
     <button
       type="button"
+      onClick={onPress}
       className="flex items-center justify-between w-full px-4 py-3 hover:bg-surface-light transition-colors lg:px-0"
     >
       <span className="text-sm text-text-primary">{label}</span>
