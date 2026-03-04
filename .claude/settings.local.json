@@ -20,7 +20,8 @@
       "Bash(codex:*)",
       "mcp__supabase__execute_sql",
       "WebFetch(domain:vercel.com)",
-      "Bash(vercel:*)"
+      "Bash(vercel:*)",
+      "Bash(npx playwright:*)"
     ]
   }
 }
