@@ -115,10 +115,10 @@ Phase 1 の前提条件。
 
 ### Phase 6: クリーンアップ
 
-- [ ] `src/lib/mock-data.ts` 削除
-- [ ] `src/__tests__/lib/mock-data.test.ts` 削除
-- [ ] 残存するモックデータ依存がないことを最終確認
-- [ ] RLS ポリシーの全体スモークテスト実施
+- [x] `src/lib/mock-data.ts` 削除
+- [x] `src/__tests__/lib/mock-data.test.ts` 削除
+- [x] 残存するモックデータ依存がないことを最終確認
+- [x] RLS ポリシーの全体スモークテスト実施 (テスト SQL 作成: `docs/reviews/phase6-rls-smoke-test.md`)
 
 ## 実装パターン (既存に倣う)
 

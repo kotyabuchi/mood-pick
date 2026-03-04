@@ -16,7 +16,9 @@
       "Bash(codex exec:*)",
       "Bash(npx react-doctor:*)",
       "Bash(npx supabase gen:*)",
-      "Bash(pnpm biome:*)"
+      "Bash(pnpm biome:*)",
+      "Bash(codex:*)",
+      "mcp__supabase__execute_sql"
     ]
   }
 }
