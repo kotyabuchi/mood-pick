@@ -40,6 +40,8 @@ export default function SignupPage() {
         setError(getAuthErrorMessage(authError));
       } else if (needsEmailVerification) {
         setShowEmailSent(true);
+      } else {
+        router.replace('/');
       }
     } finally {
       setIsLoading(false);
