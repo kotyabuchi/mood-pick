@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Loader2, Search, SearchX, XCircle } from 'lucide-react';
+import { Search, SearchX, XCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { AddToWatchlistDialog } from '@/components/ui/add-to-watchlist-dialog';
@@ -11,6 +11,7 @@ import { DurationChip } from '@/components/ui/duration-chip';
 import { EmptyState } from '@/components/ui/empty-state';
 import { MoodChip } from '@/components/ui/mood-chip';
 import { SectionDivider } from '@/components/ui/section-divider';
+import { ContentCardSkeleton, FORCE_SKELETON } from '@/components/ui/skeletons';
 import { AttentionLevels, Durations, Moods } from '@/constants/theme';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useTmdbSearch } from '@/hooks/use-tmdb-search';
@@ -89,13 +90,11 @@ export default function SearchPage() {
 
       {isTextMode ? (
         <div className="px-4 space-y-1 pb-8 lg:px-0">
-          {isLoading && (
-            <div className="flex justify-center py-12">
-              <Loader2
-                size={24}
-                className="animate-spin text-accent"
-                data-testid="loading-indicator"
-              />
+          {(FORCE_SKELETON || isLoading) && ( // TEMP: skeleton debug
+            <div className="space-y-1 animate-pulse" data-testid="skeleton">
+              <ContentCardSkeleton />
+              <ContentCardSkeleton />
+              <ContentCardSkeleton />
             </div>
           )}
           {error && (

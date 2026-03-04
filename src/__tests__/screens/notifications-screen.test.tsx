@@ -134,7 +134,7 @@ describe('NotificationsPage', () => {
     });
 
     render(<NotificationsPage />);
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(screen.getByTestId('skeleton')).toBeInTheDocument();
 
     // Reset
     mockUseNotifications = vi.fn().mockReturnValue({

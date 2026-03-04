@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
-import { AlertCircle, ChevronLeft, Ellipsis, Loader2 } from 'lucide-react';
+import { AlertCircle, ChevronLeft, Ellipsis } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { AddToWatchlistDialog } from '@/components/ui/add-to-watchlist-dialog';
 import { EmptyState } from '@/components/ui/empty-state';
 import { MoodChip } from '@/components/ui/mood-chip';
+import { DetailSkeleton, FORCE_SKELETON } from '@/components/ui/skeletons';
 import { StatusChangeDialog } from '@/components/ui/status-change-dialog';
 import { StreamingBadge } from '@/components/ui/streaming-badge';
 import { Moods } from '@/constants/theme';
@@ -65,16 +66,9 @@ export function DetailClient({ tmdbId, contentType }: DetailClientProps) {
     }
   }, [watchlistItem, tmdbId, updateMemo]);
 
-  if (tmdbLoading || (watchlistLoading && !item)) {
-    return (
-      <div className="flex-1 flex items-center justify-center min-h-[50vh]">
-        <Loader2
-          size={32}
-          className="animate-spin text-accent"
-          data-testid="loading-indicator"
-        />
-      </div>
-    );
+  if (FORCE_SKELETON || tmdbLoading || (watchlistLoading && !item)) {
+    // TEMP: skeleton debug
+    return <DetailSkeleton />;
   }
 
   if (!item) {
@@ -103,7 +97,6 @@ export function DetailClient({ tmdbId, contentType }: DetailClientProps) {
       case 'watching':
         return '途中まで見た';
       case 'watched':
-        return 'もう一度見る';
       case 'dropped':
         return 'もう一度見る';
       default:

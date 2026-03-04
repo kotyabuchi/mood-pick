@@ -1,11 +1,15 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Bell, Loader2 } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import Link from 'next/link';
 
 import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenHeader } from '@/components/ui/screen-header';
+import {
+  FORCE_SKELETON,
+  NotificationSkeleton,
+} from '@/components/ui/skeletons';
 import {
   useMarkAllAsRead,
   useMarkAsRead,
@@ -46,16 +50,12 @@ export default function NotificationsPage() {
 
   const hasUnread = notifications?.some((n) => !n.isRead) ?? false;
 
-  if (isLoading) {
+  if (FORCE_SKELETON || isLoading) {
+    // TEMP: skeleton debug
     return (
       <div className="max-w-4xl mx-auto">
         <ScreenHeader title="通知" showBack />
-        <div
-          className="flex justify-center py-20"
-          data-testid="loading-spinner"
-        >
-          <Loader2 className="w-8 h-8 text-text-secondary animate-spin" />
-        </div>
+        <NotificationSkeleton />
       </div>
     );
   }

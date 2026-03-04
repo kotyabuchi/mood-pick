@@ -118,9 +118,9 @@ describe('ProfilePage', () => {
 
     try {
       const ProfilePage = (await import('@/app/(main)/profile/page')).default;
-      const { container } = render(<ProfilePage />);
+      render(<ProfilePage />);
 
-      expect(container.querySelector('.animate-spin')).toBeInTheDocument();
+      expect(screen.getByTestId('skeleton')).toBeInTheDocument();
     } finally {
       // Restore
       profileMockState.data = mockProfile;

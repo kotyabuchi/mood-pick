@@ -1,6 +1,6 @@
 'use client';
 
-import { Film, Loader2, Settings } from 'lucide-react';
+import { Film, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -8,6 +8,7 @@ import { ContentCard } from '@/components/ui/content-card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { HorizontalCarousel } from '@/components/ui/horizontal-carousel';
 import { ScreenHeader } from '@/components/ui/screen-header';
+import { FORCE_SKELETON, ProfileSkeleton } from '@/components/ui/skeletons';
 import { UserAvatar } from '@/components/ui/user-avatar';
 import { useAuth } from '@/context/auth-context';
 import { useFollowCounts } from '@/hooks/use-follows';
@@ -24,10 +25,16 @@ export default function ProfilePage() {
   const { data: watchedItems = [] } = useWatchlist('watched');
   const { data: followCounts } = useFollowCounts(user?.id);
 
-  if (profileLoading) {
+  if (FORCE_SKELETON || profileLoading) {
+    // TEMP: skeleton debug
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 size={32} className="animate-spin text-accent" />
+      <div className="max-w-4xl mx-auto">
+        <ScreenHeader
+          title="プロフィール"
+          rightIcon={Settings}
+          onRightPress={() => router.push('/settings')}
+        />
+        <ProfileSkeleton />
       </div>
     );
   }

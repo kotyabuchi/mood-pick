@@ -1,11 +1,12 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Bookmark, CheckCircle, Loader2, Play } from 'lucide-react';
+import { Bookmark, CheckCircle, Play } from 'lucide-react';
 
 import { ContentCard } from '@/components/ui/content-card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { SectionDivider } from '@/components/ui/section-divider';
+import { FORCE_SKELETON, ListPageSkeleton } from '@/components/ui/skeletons';
 import { TabBarSegment } from '@/components/ui/tab-bar-segment';
 import { useWatchlist, useWatchlistStats } from '@/hooks/use-watchlist';
 import { daysUntil } from '@/lib/utils';
@@ -60,14 +61,14 @@ export default function ListPage() {
     [wantItems, urgentItems],
   );
 
-  if (isLoading) {
+  if (FORCE_SKELETON || isLoading) {
+    // TEMP: skeleton debug
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2
-          size={32}
-          className="animate-spin text-accent"
-          data-testid="loading-indicator"
-        />
+      <div className="max-w-4xl mx-auto">
+        <div className="px-4 pt-4 pb-2 lg:px-0 lg:pt-6">
+          <h1 className="text-2xl font-bold text-text-primary">マイリスト</h1>
+        </div>
+        <ListPageSkeleton />
       </div>
     );
   }

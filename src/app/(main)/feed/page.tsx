@@ -1,13 +1,14 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Loader2, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { AddToWatchlistDialog } from '@/components/ui/add-to-watchlist-dialog';
 import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenHeader } from '@/components/ui/screen-header';
+import { FeedCardSkeleton, FORCE_SKELETON } from '@/components/ui/skeletons';
 import { StarRating } from '@/components/ui/star-rating';
 import { UserAvatar } from '@/components/ui/user-avatar';
 import { useFeed } from '@/hooks/use-feed';
@@ -127,12 +128,8 @@ export default function FeedPage() {
       <ScreenHeader title="フィード" />
 
       <div className="pt-2 pb-8">
-        {isLoading && (
-          <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 text-accent animate-spin" />
-          </div>
-        )}
-
+        {(FORCE_SKELETON || isLoading) && <FeedCardSkeleton />}{' '}
+        {/* TEMP: skeleton debug */}
         {error && (
           <div className="text-center py-12 px-4">
             <p className="text-text-secondary text-sm">
@@ -140,7 +137,6 @@ export default function FeedPage() {
             </p>
           </div>
         )}
-
         {!isLoading && !error && feedItems?.length === 0 && (
           <EmptyState
             icon={Users}
@@ -149,7 +145,6 @@ export default function FeedPage() {
             action={{ label: '作品を探してみる', href: '/search' }}
           />
         )}
-
         {feedItems?.map((item) => (
           <FeedCard
             key={item.id}

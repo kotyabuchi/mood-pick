@@ -1,10 +1,11 @@
 'use client';
 
-import { Loader2, UserIcon } from 'lucide-react';
+import { UserIcon } from 'lucide-react';
 import { useParams } from 'next/navigation';
 
 import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenHeader } from '@/components/ui/screen-header';
+import { FORCE_SKELETON, UserListSkeleton } from '@/components/ui/skeletons';
 import { UserAvatar } from '@/components/ui/user-avatar';
 import { useAuth } from '@/context/auth-context';
 import { useToggleFollow } from '@/hooks/use-follow-mutations';
@@ -20,13 +21,12 @@ export default function UserProfilePage() {
 
   const isSelf = currentUser?.id === id;
 
-  if (isLoading) {
+  if (FORCE_SKELETON || isLoading) {
+    // TEMP: skeleton debug
     return (
       <div className="max-w-4xl mx-auto">
         <ScreenHeader title="" showBack />
-        <div className="flex justify-center py-12">
-          <Loader2 className="size-6 animate-spin text-text-secondary" />
-        </div>
+        <UserListSkeleton count={1} />
       </div>
     );
   }

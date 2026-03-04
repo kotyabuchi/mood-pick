@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 
 import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenHeader } from '@/components/ui/screen-header';
+import { FORCE_SKELETON, RecommendSkeleton } from '@/components/ui/skeletons';
 import { UserAvatar } from '@/components/ui/user-avatar';
 import { useAuth } from '@/context/auth-context';
 import { useContentDetail } from '@/hooks/use-content-detail';
@@ -125,16 +126,12 @@ export default function RecommendPage() {
 
   const isLoading = contentLoading || usersLoading;
 
-  if (isLoading) {
+  if (FORCE_SKELETON || isLoading) {
+    // TEMP: skeleton debug
     return (
       <div className="max-w-4xl mx-auto flex flex-col min-h-screen">
         <ScreenHeader title="友達におすすめ" showBack />
-        <div
-          className="flex justify-center py-20"
-          data-testid="loading-spinner"
-        >
-          <Loader2 className="w-8 h-8 text-text-secondary animate-spin" />
-        </div>
+        <RecommendSkeleton />
       </div>
     );
   }

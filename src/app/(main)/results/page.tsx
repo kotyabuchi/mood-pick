@@ -1,16 +1,30 @@
 'use client';
 
 import { Suspense, useMemo } from 'react';
-import { Loader2, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 
 import { ContentCard } from '@/components/ui/content-card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenHeader } from '@/components/ui/screen-header';
+import { ContentCardSkeleton, FORCE_SKELETON } from '@/components/ui/skeletons';
 import { Durations } from '@/constants/theme';
 import { useWatchlist } from '@/hooks/use-watchlist';
 
 import type { AttentionLevelId, DurationId, MoodId } from '@/types';
+
+function ResultsContentSkeleton() {
+  return (
+    <div
+      className="px-4 pb-8 lg:px-0 space-y-2 animate-pulse"
+      data-testid="skeleton"
+    >
+      {Array.from({ length: 4 }, (_, i) => (
+        <ContentCardSkeleton key={`result-${i.toString()}`} />
+      ))}
+    </div>
+  );
+}
 
 function ResultsContent() {
   const searchParams = useSearchParams();
@@ -18,7 +32,7 @@ function ResultsContent() {
   const duration = searchParams.get('duration');
   const attention = searchParams.get('attention');
 
-  const { data: wantItems = [] } = useWatchlist('want');
+  const { data: wantItems = [], isLoading } = useWatchlist('want');
 
   const moodIds = useMemo(
     () => (moods ? (moods.split(',') as MoodId[]) : []),
@@ -47,6 +61,11 @@ function ResultsContent() {
       }),
     [wantItems, moodIds, maxMinutes, attentionFilter],
   );
+
+  if (FORCE_SKELETON || isLoading) {
+    // TEMP: skeleton debug
+    return <ResultsContentSkeleton />;
+  }
 
   return (
     <>
@@ -79,13 +98,7 @@ export default function ResultsPage() {
   return (
     <div className="max-w-4xl mx-auto">
       <ScreenHeader title="検索結果" showBack />
-      <Suspense
-        fallback={
-          <div className="flex justify-center py-12">
-            <Loader2 size={24} className="animate-spin text-accent" />
-          </div>
-        }
-      >
+      <Suspense fallback={<ResultsContentSkeleton />}>
         <ResultsContent />
       </Suspense>
     </div>

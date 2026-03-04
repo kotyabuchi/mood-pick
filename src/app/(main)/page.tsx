@@ -1,13 +1,14 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Bell, Film, Loader2 } from 'lucide-react';
+import { Bell, Film } from 'lucide-react';
 import Link from 'next/link';
 
 import { ContentCard } from '@/components/ui/content-card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { HorizontalCarousel } from '@/components/ui/horizontal-carousel';
 import { NotificationBadge } from '@/components/ui/notification-badge';
+import { FORCE_SKELETON, HomePageSkeleton } from '@/components/ui/skeletons';
 import { UrgencyBadge } from '@/components/ui/urgency-badge';
 import { useWatchlist } from '@/hooks/use-watchlist';
 import { daysUntil } from '@/lib/utils';
@@ -48,14 +49,8 @@ export default function HomePage() {
         </Link>
       </div>
 
-      {wantLoading || watchingLoading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2
-            size={32}
-            className="animate-spin text-accent"
-            data-testid="loading-indicator"
-          />
-        </div>
+      {FORCE_SKELETON || wantLoading || watchingLoading ? ( // TEMP: skeleton debug
+        <HomePageSkeleton />
       ) : watchingItems.length === 0 && expiringItems.length === 0 ? (
         <EmptyState
           icon={Film}

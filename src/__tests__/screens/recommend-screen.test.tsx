@@ -147,7 +147,7 @@ describe('RecommendPage', () => {
     });
 
     render(<RecommendPage />);
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(screen.getByTestId('skeleton')).toBeInTheDocument();
 
     // Reset
     mockUseContentDetail = vi.fn().mockReturnValue({

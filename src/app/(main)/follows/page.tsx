@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 
 import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenHeader } from '@/components/ui/screen-header';
+import { FORCE_SKELETON, UserListSkeleton } from '@/components/ui/skeletons';
 import { TabBarSegment } from '@/components/ui/tab-bar-segment';
 import { UserRow } from '@/components/ui/user-row';
 import { useAuth } from '@/context/auth-context';
@@ -46,10 +47,8 @@ export default function FollowsPage() {
       </div>
 
       <div className="pb-8">
-        {isLoading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="size-6 animate-spin text-text-secondary" />
-          </div>
+        {FORCE_SKELETON || isLoading ? ( // TEMP: skeleton debug
+          <UserListSkeleton />
         ) : users.length === 0 ? (
           <EmptyState
             icon={Users}

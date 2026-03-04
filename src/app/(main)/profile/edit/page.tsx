@@ -1,12 +1,13 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Camera, Loader2 } from 'lucide-react';
+import { Camera } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { AuthButton } from '@/components/ui/auth-button';
 import { AuthInput } from '@/components/ui/auth-input';
 import { ScreenHeader } from '@/components/ui/screen-header';
+import { FORCE_SKELETON, ProfileEditSkeleton } from '@/components/ui/skeletons';
 import { UserAvatar } from '@/components/ui/user-avatar';
 import { useOwnProfile } from '@/hooks/use-profile';
 import {
@@ -164,10 +165,12 @@ export default function ProfileEditPage() {
     router,
   ]);
 
-  if (profileLoading) {
+  if (FORCE_SKELETON || profileLoading) {
+    // TEMP: skeleton debug
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 size={32} className="animate-spin text-accent" />
+      <div className="max-w-4xl mx-auto">
+        <ScreenHeader title="プロフィール編集" showBack />
+        <ProfileEditSkeleton />
       </div>
     );
   }
