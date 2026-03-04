@@ -14,7 +14,9 @@
       "Skill(codex-debate)",
       "Bash(npx biome:*)",
       "Bash(codex exec:*)",
-      "Bash(npx react-doctor:*)"
+      "Bash(npx react-doctor:*)",
+      "Bash(npx supabase gen:*)",
+      "Bash(pnpm biome:*)"
     ]
   }
 }

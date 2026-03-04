@@ -121,6 +121,10 @@ Tailwind v4 `@theme` 変数を使用 (`src/app/globals.css`):
 
 実装の進捗は `PROGRESS.md` で管理。タスクの着手・完了時に更新すること。新機能は Phase 順に進め、既存の `src/lib/watchlist/` パターン (DI + React Query) を踏襲。
 
+### Bash Tool
+
+Bash ツールでコマンドを実行するとき、先頭に `cd` を付けない。作業ディレクトリはツール内部で管理されるため不要。
+
 ### Environment Variables
 
 ```
