@@ -1,25 +1,61 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
-import { Check } from 'lucide-react';
+import { Check, Loader2 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { UserAvatar } from '@/components/ui/user-avatar';
+import { useAuth } from '@/context/auth-context';
+import { useContentDetail } from '@/hooks/use-content-detail';
+import { useFollowing } from '@/hooks/use-follows';
+import { useSendRecommendations } from '@/hooks/use-recommendation-mutations';
 import { cn } from '@/lib/cn';
-import { mockContents, mockUsers } from '@/lib/mock-data';
 
-import type { User } from '@/types';
+import type { ContentType, User } from '@/types';
+
+function parseContentId(id: string): {
+  tmdbId: number;
+  type: ContentType;
+} | null {
+  const match = id.match(/^tmdb-(movie|tv|anime)-(\d+)$/);
+  if (!match) return null;
+  return {
+    type: match[1] as ContentType,
+    tmdbId: parseInt(match[2], 10),
+  };
+}
+
+function normalizeType(type: ContentType): 'movie' | 'tv' {
+  return type === 'anime' ? 'tv' : type;
+}
 
 export default function RecommendPage() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
 
-  const content = useMemo(() => mockContents.find((c) => c.id === id), [id]);
+  const parsed = useMemo(() => parseContentId(id), [id]);
+  const fetchType = parsed ? normalizeType(parsed.type) : null;
+
+  const { content, isLoading: contentLoading } = useContentDetail(
+    parsed?.tmdbId ?? null,
+    fetchType,
+  );
+  const {
+    data: followingUsers,
+    isLoading: usersLoading,
+    isError: usersError,
+  } = useFollowing(user?.id);
+
+  const { mutate: sendRecommendations, isPending: isSending } =
+    useSendRecommendations(user?.id);
+
   const [selectedUserIds, setSelectedUserIds] = useState<Set<string>>(
     new Set(),
   );
   const [message, setMessage] = useState('');
+  const [sendError, setSendError] = useState(false);
 
   const handleToggleUser = useCallback((userId: string) => {
     setSelectedUserIds((prev) => {
@@ -32,6 +68,28 @@ export default function RecommendPage() {
       return next;
     });
   }, []);
+
+  const handleSend = useCallback(() => {
+    if (!content || !parsed || selectedUserIds.size === 0) return;
+
+    setSendError(false);
+    sendRecommendations(
+      {
+        toUserIds: Array.from(selectedUserIds),
+        content,
+        contentType: parsed.type,
+        message: message.trim() || undefined,
+      },
+      {
+        onSuccess: () => {
+          router.back();
+        },
+        onError: () => {
+          setSendError(true);
+        },
+      },
+    );
+  }, [content, parsed, selectedUserIds, message, sendRecommendations, router]);
 
   const renderUserItem = useCallback(
     (item: User) => {
@@ -64,16 +122,41 @@ export default function RecommendPage() {
     [selectedUserIds, handleToggleUser],
   );
 
+  const isLoading = contentLoading || usersLoading;
+
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto flex flex-col min-h-screen">
+        <ScreenHeader title="友達におすすめ" showBack />
+        <div
+          className="flex justify-center py-20"
+          data-testid="loading-spinner"
+        >
+          <Loader2 className="w-8 h-8 text-text-secondary animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
+  if (usersError || !content) {
+    return (
+      <div className="max-w-4xl mx-auto flex flex-col min-h-screen">
+        <ScreenHeader title="友達におすすめ" showBack />
+        <div className="px-4 py-20 text-center" data-testid="error-message">
+          <p className="text-text-secondary">読み込みに失敗しました</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto flex flex-col min-h-screen">
       <ScreenHeader title="友達におすすめ" showBack />
 
       {/* Content info */}
-      {content && (
-        <div className="px-4 pb-3 border-b border-border lg:px-0">
-          <p className="text-sm font-bold text-text-primary">{content.title}</p>
-        </div>
-      )}
+      <div className="px-4 pb-3 border-b border-border lg:px-0">
+        <p className="text-sm font-bold text-text-primary">{content.title}</p>
+      </div>
 
       {/* Header */}
       <div className="px-4 pt-3 pb-2 lg:px-0">
@@ -82,7 +165,15 @@ export default function RecommendPage() {
 
       {/* User checklist */}
       <div className="flex-1 overflow-y-auto pb-2">
-        {mockUsers.map(renderUserItem)}
+        {followingUsers && followingUsers.length > 0 ? (
+          followingUsers.map(renderUserItem)
+        ) : (
+          <div className="px-4 py-12 text-center" data-testid="empty-users">
+            <p className="text-text-secondary">
+              フォロー中のユーザーがいません
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Message input + Send button */}
@@ -95,18 +186,27 @@ export default function RecommendPage() {
           className="w-full bg-surface rounded-lg p-3 text-sm text-text-primary placeholder:text-text-disabled outline-none resize-none mb-3"
           rows={2}
         />
+        {sendError && (
+          <p className="text-xs text-red-500 mb-2" data-testid="send-error">
+            送信に失敗しました。もう一度お試しください。
+          </p>
+        )}
         <button
           type="button"
-          disabled={selectedUserIds.size === 0}
-          onClick={() => router.back()}
+          disabled={selectedUserIds.size === 0 || isSending}
+          onClick={handleSend}
           className={cn(
             'w-full rounded-lg py-3 text-sm font-bold transition-colors',
-            selectedUserIds.size > 0
+            selectedUserIds.size > 0 && !isSending
               ? 'bg-accent text-white hover:bg-accent-hover'
               : 'bg-surface-light text-text-disabled cursor-not-allowed',
           )}
         >
-          おすすめを送る
+          {isSending ? (
+            <Loader2 className="w-4 h-4 animate-spin mx-auto" />
+          ) : (
+            'おすすめを送る'
+          )}
         </button>
       </div>
     </div>

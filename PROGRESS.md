@@ -14,7 +14,7 @@
 | 通知 | Supabase `notifications` 実装済み — フォロートリガー + RLS + 未読バッジ |
 | プロフィール | Supabase `profiles` 実装済み — 編集・アバター・handle バリデーション完了 |
 | ユーザーページ | Supabase `profiles` + `follows` 実装済み |
-| **おすすめ送信** | **モック (`mockContents`, `mockUsers`)** — 送信ロジックなし |
+| おすすめ送信 | Supabase `recommendations` 実装済み — 送信ロジック + トリガー (activity_log + notifications) |
 
 ## 既存DBテーブル
 
@@ -100,15 +100,18 @@ Phase 1 の前提条件。
 - [x] テスト: notifications-api (11件), notifications-mappers (4件), use-notifications (2件), use-notification-mutations (2件), notification-badge (4件), notifications-screen (11件) — 全合格
 - [x] codex-debate レビュー: 1件採用 (groupByDate に older セクション追加)
 
-### Phase 5: おすすめ送信
+### Phase 5: おすすめ送信 ✅
 
-モック依存: `recommend/[id]/page.tsx`
-
-- [ ] `recommendations` テーブル作成 (from_user_id, to_user_id, tmdb_id, message, created_at)
-- [ ] RLS ポリシー (自分の送信/受信のみ SELECT、自分の送信のみ INSERT)
-- [ ] 送信ロジック実装 (複数ユーザー一括送信)
-- [ ] 送信時に `notifications` へ自動挿入するトリガー (おすすめ受信通知)
-- [ ] `recommend/[id]/page.tsx` 実装差し替え — フォロー中ユーザー一覧を実DBから取得
+- [x] `recommendations` テーブル作成 (from_user_id, to_user_id, tmdb_id, content_type, title, poster_url, message 等)
+- [x] RLS ポリシー (送受信者 SELECT、フォロー中相手のみ INSERT)、no_self_recommend CHECK 制約
+- [x] `activity_log` 追加ポリシー (recipient_id ベースの SELECT)
+- [x] トリガー `on_recommendation_created()` — activity_log + notifications 自動生成
+- [x] `lib/recommendations/api.ts` — `sendRecommendations()` (anime→tv 正規化、一括 INSERT)
+- [x] `hooks/use-recommendation-mutations.ts` — `useSendRecommendations()`
+- [x] `recommend/[id]/page.tsx` 全面書き換え — useContentDetail + useFollowing で実DB/API接続
+- [x] テスト: recommendations-api (4件), recommend-screen (9件) — 全合格
+- [x] codex-debate レビュー: 2件採用 (送信エラーハンドリング追加, activity_log ポリシー制約強化)
+- [x] react-doctor: 100/100, pnpm check / build / test 全パス
 
 ### Phase 6: クリーンアップ
 

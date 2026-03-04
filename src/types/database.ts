@@ -209,6 +209,66 @@ export type Database = {
         };
         Relationships: [];
       };
+      recommendations: {
+        Row: {
+          content_type: string;
+          created_at: string;
+          from_user_id: string;
+          genre: string;
+          id: string;
+          message: string | null;
+          poster_url: string;
+          runtime: number;
+          title: string;
+          tmdb_id: number;
+          to_user_id: string;
+          year: number;
+        };
+        Insert: {
+          content_type: string;
+          created_at?: string;
+          from_user_id: string;
+          genre?: string;
+          id?: string;
+          message?: string | null;
+          poster_url: string;
+          runtime?: number;
+          title: string;
+          tmdb_id: number;
+          to_user_id: string;
+          year?: number;
+        };
+        Update: {
+          content_type?: string;
+          created_at?: string;
+          from_user_id?: string;
+          genre?: string;
+          id?: string;
+          message?: string | null;
+          poster_url?: string;
+          runtime?: number;
+          title?: string;
+          tmdb_id?: number;
+          to_user_id?: string;
+          year?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'recommendations_from_user_id_fkey';
+            columns: ['from_user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'recommendations_to_user_id_fkey';
+            columns: ['to_user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       watchlist_items: {
         Row: {
           attention_level: string;
@@ -449,3 +509,7 @@ export type FollowsInsert = PublicSchema['Tables']['follows']['Insert'];
 export type NotificationRow = PublicSchema['Tables']['notifications']['Row'];
 export type NotificationUpdate =
   PublicSchema['Tables']['notifications']['Update'];
+export type RecommendationRow =
+  PublicSchema['Tables']['recommendations']['Row'];
+export type RecommendationInsert =
+  PublicSchema['Tables']['recommendations']['Insert'];
