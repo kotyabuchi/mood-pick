@@ -4,128 +4,101 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-MoodPick — 気分で映画・ドラマを選ぶウォッチリストPWA。React Native Expoから Next.js PWA に移行済み。
+MoodPick — 気分で映画・ドラマを選ぶウォッチリストPWA。Next.js PWA。
 
 ## Commands
 
-```bash
-pnpm dev              # 開発サーバー起動 (Turbopack)
-pnpm build            # 本番ビルド (Serwist SW含む)
-pnpm lint             # Biome lint
-pnpm format           # Biome format (--write)
-pnpm check            # Biome lint + format (--write)
-pnpm test             # Vitest 全テスト実行
-pnpm test:watch       # Vitest ウォッチモード
-pnpm test:e2e         # Playwright E2E テスト
-```
+| コマンド | 用途 |
+|---------|------|
+| `pnpm dev` | 開発サーバー起動（Turbopack） |
+| `pnpm build` | 本番ビルド（Serwist SW含む） |
+| `pnpm check` | Biome lint + format 一括実行 |
+| `pnpm test` | Vitest 全テスト実行 |
+| `pnpm test:e2e` | Playwright E2E テスト |
+| `supabase db push` | マイグレーションをリモートに適用 |
+| `supabase gen types typescript --linked > src/types/database.ts` | DB型自動生成 |
 
 単一テスト実行: `pnpm vitest run src/__tests__/ファイル名.test.tsx`
 
-### Supabase CLI
-
-```bash
-supabase db pull          # リモートスキーマをローカルにプル (マイグレーション生成)
-supabase db push          # ローカルマイグレーションをリモートに適用
-supabase db diff          # ローカルとリモートのスキーマ差分
-supabase gen types typescript --linked > src/types/database.ts  # DB型自動生成
-supabase migration new <name>  # 新規マイグレーションファイル作成
-```
-
-プロジェクトRef: `nbatknqxnksiiyojjhjl` (Tokyo region)。マイグレーション: `supabase/migrations/`。
-
 ## Tech Stack
 
-- **Next.js 16** (App Router, Turbopack) / React 19 / TypeScript strict
-- **Tailwind CSS v4** (CSS-first `@theme` in `globals.css`, PostCSS経由)
-- **Supabase** (Auth SSR + DB) / **TMDb API** (映画データ、API Routeでプロキシ)
-- **React Query** (クライアント側データ取得・キャッシュ)
-- **Serwist** (PWA Service Worker)
-- **Biome** (lint + format、ESLint/Prettier不使用)
-- **Vitest** (単体テスト) / **Playwright** (E2E)
-- **Radix UI** (アクセシブルUIプリミティブ) / **Lucide** (アイコン)
+- **Framework**: Next.js 16 (App Router, Turbopack) / React 19 / TypeScript strict
+- **Styling**: Tailwind CSS v4 (CSS-first `@theme`, PostCSS)
+- **Database/Auth**: Supabase (Auth SSR + DB)
+- **External API**: TMDb API (API Routeでプロキシ)
+- **State**: React Query (クライアント側キャッシュ)
+- **PWA**: Serwist (Service Worker)
+- **Linter/Formatter**: Biome (ESLint/Prettier不使用)
+- **Testing**: Vitest + Playwright
+- **UI**: Radix UI + Lucide Icons
 
-## Architecture
+## Directory Structure
 
-### Route Groups
+```
+src/
+├── app/
+│   ├── (auth)/             # 未認証ユーザー向け
+│   ├── (main)/             # 認証必須の保護ルート（ボトムナビ付き）
+│   ├── api/tmdb/           # TMDb APIプロキシ
+│   └── sw.ts               # Service Worker
+├── components/             # 共通UIコンポーネント
+├── constants/              # 定数
+├── context/                # AuthContext
+├── hooks/                  # カスタムフック
+├── lib/
+│   ├── supabase/           # client.ts, server.ts, middleware.ts
+│   ├── tmdb/               # client.ts, server.ts, mappers.ts
+│   └── watchlist/          # api.ts (DI対応), mappers.ts, query-keys.ts
+├── test/                   # テストヘルパー
+└── types/                  # index.ts, database.ts, tmdb.ts
+```
 
-- `src/app/(main)/` — 認証必須の保護ルート。`layout.tsx` に `AppNavigation` (ボトムナビ)
-- `src/app/(auth)/` — 未認証ユーザー向け。認証済みなら `/` へリダイレクト
-- `src/app/api/tmdb/` — TMDb APIプロキシ (TMDB_API_KEYをサーバー側で隠蔽)
+## Key Patterns
 
-### Auth Flow
+| パターン | 概要 | 詳細参照 |
+|---------|------|---------|
+| DBアクセス | `createClient()` + Supabase生成型 | `architecture.md` |
+| データ取得 | Server: Supabase直接 / Client: React Query | `architecture.md` |
+| TMDbプロキシ | `/api/tmdb/*` 経由でAPIキー隠蔽 | `architecture.md` |
+| Auth | Middleware でセッション管理 + リダイレクト | `architecture.md` |
+| 型の導出 | Supabase生成型 / `z.infer` を Single Source of Truth | `typescript-rules.md` |
+| 楽観的更新 | `useTransition` + `useOptimistic` | `react-form-patterns.md` |
+| パスエイリアス | `@/*` → `src/*` | - |
 
-Middleware (`src/lib/supabase/middleware.ts`) がリクエスト毎にセッションリフレッシュ。未認証は `/login` へ、認証済みが auth ページにアクセスすると `/` へリダイレクト。Public routes: `/login`, `/signup`, `/forgot-password`, `/auth/callback`, `/offline`, `/api/`。
+## Rules Reference
 
-### Data Fetching Pattern
+| ルールファイル | 内容 |
+|---------------|------|
+| `architecture.md` | ルートグループ、Auth Flow、データ取得、PWA |
+| `coding-standards.md` | Biome設定、テーマ、Import順序、Bash |
+| `typescript-rules.md` | 型厳格さ、Single Source of Truth |
+| `react-form-patterns.md` | useTransition + useOptimistic パターン |
+| `quality-checks.md` | Batch完了時の必須チェック手順 |
 
-- **Server Components**: `createClient()` (from `src/lib/supabase/server.ts`) で直接Supabase問い合わせ
-- **Client Components**: React Query + Supabase browser client。Query Key は `src/lib/watchlist/query-keys.ts` で一元管理
-- **TMDb**: クライアントから `/api/tmdb/*` を fetch → サーバー側で TMDB_API_KEY 付与
+すべてのルールファイルは `.claude/rules/` に配置。
 
-### Key Libraries
+## Skills Reference
 
-| ディレクトリ | 責務 |
-|---|---|
-| `src/lib/supabase/` | client.ts (ブラウザ), server.ts (SSR), middleware.ts (セッション管理) |
-| `src/lib/tmdb/` | client.ts, server.ts, mappers.ts (TMDbレスポンス → Content型変換) |
-| `src/lib/watchlist/` | api.ts (CRUD, DI対応), mappers.ts, query-keys.ts |
-| `src/context/` | AuthContext (signIn/signUp/signOut/resetPassword) |
-| `src/hooks/` | use-watchlist, use-watchlist-mutations, use-tmdb-search, use-content-detail 等 |
+| スキル | 用途 |
+|--------|------|
+| `/commit` | Conventional Commits形式でコミット |
+| `/codex-debate` | Codex CLIとのクロスレビュー |
+| `/resolve-issue` | GitHub Issue対応ワークフロー |
+| `/idea` | GitHub Issueとしてアイディア起票 |
+| `/tdd` | TDD（テスト駆動開発）で実装 |
 
-### PWA (Serwist)
-
-Service Worker: `src/app/sw.ts`。TMDb画像はCacheFirst(30日)、TMDb APIはStaleWhileRevalidate(5分)、認証ページはNetworkFirst、メインページ/Supabase APIはNetworkOnly。オフラインフォールバック: `/~offline`。
-
-## Conventions
-
-### Theme (Dark Only)
-
-Tailwind v4 `@theme` 変数を使用 (`src/app/globals.css`):
-- Background: `background` (#0D0D0D), Surface: `surface` / `surface-light`
-- Accent: `accent` (#FF6B00)
-- Text: `text-primary`, `text-secondary`, `text-disabled`
-
-### Biome Rules
-
-- シングルクォート、スペースインデント、LF改行
-- `noExplicitAny: error` — any禁止
-- `noUnusedImports: error`
-- Import順序: react → packages → lib → paths → relative → types (空行区切り)
-
-### UI用語 (日本語)
+## UI用語 (日本語)
 
 - ステータス名: **見たい** / **視聴中** / **見た** (「観」は使わない)
 - CTA: **「今すぐ見る」**
 - 気分タグ5種: **興奮 / 切ない / 笑い / 思考 / まったり**
 - アクション: **「見たいに追加」** (「ウォッチリスト」は使わない)
 
-### Types
+## Progress Management
 
-コア型は `src/types/index.ts` に集約。DB生成型は `src/types/database.ts`、TMDb型は `src/types/tmdb.ts`。
+実装の進捗は `PROGRESS.md` で管理。タスクの着手・完了時に更新。新機能は Phase 順に進め、既存の `src/lib/watchlist/` パターン (DI + React Query) を踏襲。
 
-### Quality Checks
-
-実装の各 Batch 完了時に以下を**必ず**実行すること。スキップ禁止。
-
-1. `pnpm check` — Biome lint + format
-2. `npx react-doctor --diff main --verbose` — React ベストプラクティス検証
-3. `/codex-debate` — Codex CLI とのクロスレビュー（指摘があれば修正してから次の Batch へ）
-4. `pnpm build` — TypeScript 型チェック + ビルド
-5. `pnpm test` — 全テスト実行
-
-レポートは `docs/reviews/` に出力される。
-
-**計画書レビュー**: Plan mode で ExitPlanMode する前にも `/codex-debate` で計画書をクロスレビューすること。
-
-### Progress Tracking
-
-実装の進捗は `PROGRESS.md` で管理。タスクの着手・完了時に更新すること。新機能は Phase 順に進め、既存の `src/lib/watchlist/` パターン (DI + React Query) を踏襲。
-
-### Bash Tool
-
-Bash ツールでコマンドを実行するとき、先頭に `cd` を付けない。作業ディレクトリはツール内部で管理されるため不要。
-
-### Environment Variables
+## Environment Variables
 
 ```
 NEXT_PUBLIC_SUPABASE_URL      # Supabase プロジェクトURL
