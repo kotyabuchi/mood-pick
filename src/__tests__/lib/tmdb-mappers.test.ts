@@ -21,9 +21,7 @@ import type {
 
 describe('buildPosterUrl', () => {
   it('posterPathがnullの場合プレースホルダーを返す', () => {
-    expect(buildPosterUrl(null)).toBe(
-      'https://via.placeholder.com/500x750?text=No+Image',
-    );
+    expect(buildPosterUrl(null)).toBe('/no-poster.svg');
   });
   it('posterPathがある場合TMDb URLを返す', () => {
     expect(buildPosterUrl('/abc123.jpg')).toBe(
@@ -39,9 +37,7 @@ describe('buildPosterUrl', () => {
 
 describe('buildBackdropUrl', () => {
   it('backdropPathがnullの場合プレースホルダーを返す', () => {
-    expect(buildBackdropUrl(null)).toBe(
-      'https://via.placeholder.com/500x750?text=No+Image',
-    );
+    expect(buildBackdropUrl(null)).toBe('/no-poster.svg');
   });
   it('backdropPathがある場合TMDb URLを返す', () => {
     expect(buildBackdropUrl('/bg123.jpg')).toBe(

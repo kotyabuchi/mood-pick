@@ -4,6 +4,7 @@ import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import type { LucideIcon } from 'lucide-react';
+import type { ReactNode } from 'react';
 
 interface ScreenHeaderProps {
   title: string;
@@ -11,6 +12,7 @@ interface ScreenHeaderProps {
   showBack?: boolean;
   rightIcon?: LucideIcon;
   onRightPress?: () => void;
+  rightAction?: ReactNode;
 }
 
 export function ScreenHeader({
@@ -19,6 +21,7 @@ export function ScreenHeader({
   showBack,
   rightIcon: RightIcon,
   onRightPress,
+  rightAction,
 }: ScreenHeaderProps) {
   const router = useRouter();
 
@@ -42,16 +45,17 @@ export function ScreenHeader({
         {title}
       </h1>
       <div className="w-10 flex justify-end">
-        {RightIcon && onRightPress && (
-          <button
-            type="button"
-            onClick={onRightPress}
-            data-testid="right-button"
-            className="text-text-primary hover:text-text-secondary transition-colors"
-          >
-            <RightIcon size={24} />
-          </button>
-        )}
+        {rightAction ??
+          (RightIcon && onRightPress && (
+            <button
+              type="button"
+              onClick={onRightPress}
+              data-testid="right-button"
+              className="text-text-primary hover:text-text-secondary transition-colors"
+            >
+              <RightIcon size={24} />
+            </button>
+          ))}
       </div>
     </header>
   );

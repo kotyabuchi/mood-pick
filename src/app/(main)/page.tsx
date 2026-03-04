@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 import { ContentCard } from '@/components/ui/content-card';
 import { HorizontalCarousel } from '@/components/ui/horizontal-carousel';
+import { NotificationBadge } from '@/components/ui/notification-badge';
 import { UrgencyBadge } from '@/components/ui/urgency-badge';
 import { useWatchlist } from '@/hooks/use-watchlist';
 import { daysUntil } from '@/lib/utils';
@@ -41,6 +42,7 @@ export default function HomePage() {
           data-testid="notification-bell"
         >
           <Bell size={24} />
+          <NotificationBadge />
         </Link>
       </div>
 

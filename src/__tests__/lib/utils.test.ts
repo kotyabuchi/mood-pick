@@ -92,7 +92,12 @@ describe('formatExpirationText', () => {
 
 describe('groupByDate', () => {
   it('空配列を渡すと全グループが空配列', () => {
-    expect(groupByDate([])).toEqual({ today: [], yesterday: [], thisWeek: [] });
+    expect(groupByDate([])).toEqual({
+      today: [],
+      yesterday: [],
+      thisWeek: [],
+      older: [],
+    });
   });
   it('今日のタイムスタンプのアイテムはtodayに分類される', () => {
     const items = [{ timestamp: new Date().toISOString(), id: '1' }];
@@ -120,6 +125,16 @@ describe('groupByDate', () => {
     ];
     const result = groupByDate(items);
     expect(result.thisWeek).toHaveLength(1);
+  });
+  it('1週間超のアイテムはolderに分類される', () => {
+    const items = [
+      {
+        timestamp: new Date(Date.now() - 14 * 86400000).toISOString(),
+        id: '1',
+      },
+    ];
+    const result = groupByDate(items);
+    expect(result.older).toHaveLength(1);
   });
 });
 

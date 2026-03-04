@@ -115,6 +115,8 @@ Tailwind v4 `@theme` 変数を使用 (`src/app/globals.css`):
 
 レポートは `docs/reviews/` に出力される。
 
+**計画書レビュー**: Plan mode で ExitPlanMode する前にも `/codex-debate` で計画書をクロスレビューすること。
+
 ### Progress Tracking
 
 実装の進捗は `PROGRESS.md` で管理。タスクの着手・完了時に更新すること。新機能は Phase 順に進め、既存の `src/lib/watchlist/` パターン (DI + React Query) を踏襲。

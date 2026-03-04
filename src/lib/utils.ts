@@ -42,7 +42,7 @@ export function formatExpirationText(isoDate: string): string {
 
 export function groupByDate<T extends { timestamp: string }>(
   items: T[],
-): { today: T[]; yesterday: T[]; thisWeek: T[] } {
+): { today: T[]; yesterday: T[]; thisWeek: T[]; older: T[] } {
   const now = new Date();
   const todayStart = new Date(
     now.getFullYear(),
@@ -55,6 +55,7 @@ export function groupByDate<T extends { timestamp: string }>(
   const today: T[] = [];
   const yesterday: T[] = [];
   const thisWeek: T[] = [];
+  const older: T[] = [];
 
   for (const item of items) {
     const ts = new Date(item.timestamp).getTime();
@@ -64,10 +65,12 @@ export function groupByDate<T extends { timestamp: string }>(
       yesterday.push(item);
     } else if (ts >= weekStart) {
       thisWeek.push(item);
+    } else {
+      older.push(item);
     }
   }
 
-  return { today, yesterday, thisWeek };
+  return { today, yesterday, thisWeek, older };
 }
 
 const STREAMING_SERVICE_MAP: Record<

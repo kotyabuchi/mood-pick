@@ -10,9 +10,9 @@
 | ウォッチリスト CRUD | Supabase `watchlist_items` 実装済み |
 | 検索・詳細 | TMDb API proxy 実装済み |
 | フォロー | Supabase `follows` 実装済み |
-| **フィード** | **モック (`mockFeedItems`)** |
-| **通知** | **モック (`mockNotifications`)** |
-| **プロフィール** | **一部モック (`mockCurrentUser`)** — stats/recentWatched は実DB |
+| フィード | Supabase `activity_log` 実装済み (トリガー自動生成 + RLS) |
+| 通知 | Supabase `notifications` 実装済み — フォロートリガー + RLS + 未読バッジ |
+| プロフィール | Supabase `profiles` 実装済み — 編集・アバター・handle バリデーション完了 |
 | ユーザーページ | Supabase `profiles` + `follows` 実装済み |
 | **おすすめ送信** | **モック (`mockContents`, `mockUsers`)** — 送信ロジックなし |
 
@@ -60,36 +60,45 @@ Phase 1 の前提条件。
 
 モック依存: `profile/page.tsx` の `mockCurrentUser`
 
-- [ ] `profile/page.tsx` — ユーザー情報を `profiles` テーブルから取得
-- [ ] 今月/今年の視聴数を `watchlist_items` の日付フィルタで算出
-- [ ] プロフィール編集機能 (name, handle, avatar_url 更新)
-- [ ] handle バリデーション: 英数字+アンダースコア、3-20文字、小文字正規化 (DB CHECK 制約 + アプリ側 Zod)
+- [x] `profile/page.tsx` — ユーザー情報を `profiles` テーブルから取得
+- [x] 今月/今年の視聴数を `watchlist_items` の日付フィルタで算出
+- [x] プロフィール編集機能 (name, handle, avatar_url 更新)
+- [x] handle バリデーション: 英数字+アンダースコア、3-20文字、小文字正規化 (DB CHECK 制約 + アプリ側 Zod)
+- [x] テスト: profile-api (8件), profile-validation (20件), watchlist-timed-stats (4件), use-profile (2件), use-timed-watch-stats (1件), profile-screen (6件), use-profile-mutations (3件), profile-edit-screen (4件) — 全合格
+- [x] codex-debate レビュー: 3件採用 (migration UNIQUE 衝突防止, handle チェック race condition, handle クリア対応)
 
 ### Phase 3: フィード (アクティビティ)
 
 モック依存: `feed/page.tsx`
 
-- [ ] `activity_log` テーブル作成 (user_id, tmdb_id, action_type, rating, review, message, recipient_id, created_at)
-- [ ] インデックス: `(created_at DESC, id DESC)` 複合インデックス (ページネーション対応)
-- [ ] RLS ポリシー (フォロー中ユーザーのアクティビティを SELECT 可 — follows テーブルへのサブクエリ)
-- [ ] `watchlist_items` の status 変更時に `activity_log` へ自動挿入するトリガー (`WHEN OLD.status IS DISTINCT FROM NEW.status` で冪等性確保)
-- [ ] `src/lib/activity/api.ts` — getFeed (フォロー中ユーザーのアクティビティ)
-- [ ] `src/lib/activity/mappers.ts` — Row → FeedItem 変換 (profiles JOIN + TMDb情報)
-- [ ] `src/hooks/use-feed.ts`
-- [ ] `feed/page.tsx` 実装差し替え
+- [x] `activity_log` テーブル作成 (user_id, tmdb_id, action_type, rating, review, message, recipient_id + 非正規化コンテンツ列)
+- [x] インデックス: `(created_at DESC, id DESC)` 複合インデックス (ページネーション対応)
+- [x] RLS ポリシー (フォロー中 + 自分のアクティビティを SELECT 可 — follows サブクエリ)
+- [x] `watchlist_items` の INSERT/UPDATE 時に `activity_log` へ自動挿入するトリガー (SECURITY DEFINER, `WHEN OLD.status IS DISTINCT FROM NEW.status`)
+- [x] 既存 `watchlist_items` からのバックフィル
+- [x] `src/lib/activity/api.ts` — createActivityApi(client).fetchFeed() (profiles JOIN + DI パターン)
+- [x] `src/lib/activity/mappers.ts` — mapActivityRowToFeedItem (Row + profile → FeedItem)
+- [x] `src/lib/activity/query-keys.ts` — feedKeys (all, list)
+- [x] `src/hooks/use-feed.ts` — useFeed (React Query + enabled: !!user)
+- [x] `feed/page.tsx` 実装差し替え (ローディング/エラー/空状態対応)
+- [x] テスト: activity-api (6件), use-feed (1件), feed-screen (8件) — 全合格
+- [x] codex-debate レビュー: 0件採用 (3件全て Phase 3 スコープ外と判断)
 
 ### Phase 4: 通知
 
 モック依存: `notifications/page.tsx`
 
-- [ ] `notifications` テーブル作成 (user_id, type, title, target_id, service_name, is_read, created_at)
-- [ ] インデックス: `(created_at DESC, id DESC)` 複合インデックス (ページネーション対応)
-- [ ] RLS ポリシー (自分の通知のみ SELECT/UPDATE)
-- [ ] 通知生成トリガー: フォローされた時 (おすすめ通知は Phase 5 で追加)
-- [ ] `src/lib/notifications/api.ts` — getNotifications, markAsRead, getUnreadCount
-- [ ] `src/hooks/use-notifications.ts`
-- [ ] `notifications/page.tsx` 実装差し替え
-- [ ] ヘッダーの通知ベルに未読バッジ表示
+- [x] `notifications` テーブル作成 (user_id, type, title, target_id, service_name, is_read, created_at)
+- [x] インデックス: `(user_id, created_at DESC, id DESC)` 複合 + `(user_id) WHERE is_read = false` partial
+- [x] RLS ポリシー (自分の通知のみ SELECT/UPDATE、INSERT はトリガー経由のみ)
+- [x] 通知生成トリガー: フォローされた時 (`notify_on_follow` SECURITY DEFINER)
+- [x] `src/lib/notifications/api.ts` — fetchNotifications, fetchUnreadCount, markAsRead, markAllAsRead
+- [x] `src/hooks/use-notifications.ts` — useNotifications, useUnreadNotificationCount (60s refetch)
+- [x] `src/hooks/use-notification-mutations.ts` — useMarkAsRead, useMarkAllAsRead (楽観的更新)
+- [x] `notifications/page.tsx` 実装差し替え (ローディング/エラー/空状態、日付グループ表示)
+- [x] ヘッダーの通知ベルに未読バッジ表示 (NotificationBadge コンポーネント)
+- [x] テスト: notifications-api (11件), notifications-mappers (4件), use-notifications (2件), use-notification-mutations (2件), notification-badge (4件), notifications-screen (11件) — 全合格
+- [x] codex-debate レビュー: 1件採用 (groupByDate に older セクション追加)
 
 ### Phase 5: おすすめ送信
 
