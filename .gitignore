@@ -45,3 +45,6 @@ next-env.d.ts
 
 # tunnel
 .tunnel-backup
+
+# AI agent review reports
+/docs/reviews/
