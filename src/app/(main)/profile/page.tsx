@@ -1,10 +1,11 @@
 'use client';
 
-import { Loader2, Settings } from 'lucide-react';
+import { Film, Loader2, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { ContentCard } from '@/components/ui/content-card';
+import { EmptyState } from '@/components/ui/empty-state';
 import { HorizontalCarousel } from '@/components/ui/horizontal-carousel';
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { UserAvatar } from '@/components/ui/user-avatar';
@@ -114,7 +115,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Recent watched */}
-        {watchedItems.length > 0 && (
+        {watchedItems.length > 0 ? (
           <HorizontalCarousel title="最近見た作品">
             {watchedItems.map((item) => (
               <div key={item.watchlistId} className="w-[120px] shrink-0">
@@ -122,6 +123,18 @@ export default function ProfilePage() {
               </div>
             ))}
           </HorizontalCarousel>
+        ) : (
+          <div className="mx-4 lg:mx-0">
+            <h2 className="text-base font-bold text-text-primary mb-1">
+              最近見た作品
+            </h2>
+            <EmptyState
+              icon={Film}
+              title="まだ見た作品がありません"
+              description="作品を見たら記録してみましょう"
+              action={{ label: '作品を探す', href: '/search' }}
+            />
+          </div>
         )}
       </div>
     </div>

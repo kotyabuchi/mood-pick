@@ -166,10 +166,9 @@ describe('FeedPage', () => {
       error: null,
     });
     render(<FeedPage />);
+    expect(screen.getByText('フィードはまだ空です')).toBeInTheDocument();
     expect(
-      screen.getByText(
-        'フォロー中のユーザーのアクティビティがここに表示されます',
-      ),
+      screen.getByText('ユーザーをフォローするとアクティビティが表示されます'),
     ).toBeInTheDocument();
   });
 });

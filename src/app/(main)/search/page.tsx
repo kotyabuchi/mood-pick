@@ -1,13 +1,14 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Loader2, Search, XCircle } from 'lucide-react';
+import { Loader2, Search, SearchX, XCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { AddToWatchlistDialog } from '@/components/ui/add-to-watchlist-dialog';
 import { AttentionChip } from '@/components/ui/attention-chip';
 import { ContentCard } from '@/components/ui/content-card';
 import { DurationChip } from '@/components/ui/duration-chip';
+import { EmptyState } from '@/components/ui/empty-state';
 import { MoodChip } from '@/components/ui/mood-chip';
 import { SectionDivider } from '@/components/ui/section-divider';
 import { AttentionLevels, Durations, Moods } from '@/constants/theme';
@@ -106,9 +107,11 @@ export default function SearchPage() {
             !error &&
             results.length === 0 &&
             debouncedQuery.length >= 2 && (
-              <p className="text-center text-sm text-text-secondary py-12">
-                「{debouncedQuery}」に一致する作品が見つかりません
-              </p>
+              <EmptyState
+                icon={SearchX}
+                title={`「${debouncedQuery}」に一致する作品が見つかりません`}
+                description="別のキーワードで検索してみてください"
+              />
             )}
           {results.map((item) => (
             <ContentCard

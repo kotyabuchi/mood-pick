@@ -37,4 +37,22 @@ describe('EmptyState', () => {
     const svg = container.querySelector('svg');
     expect(svg).toBeInTheDocument();
   });
+
+  it('actionが渡された場合、リンクボタンが表示される', () => {
+    render(
+      <EmptyState
+        icon={AlertCircle}
+        title="データがありません"
+        action={{ label: '作品を探す', href: '/search' }}
+      />,
+    );
+    const link = screen.getByRole('link', { name: '作品を探す' });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', '/search');
+  });
+
+  it('actionが渡されない場合、リンクボタンが表示されない', () => {
+    render(<EmptyState icon={AlertCircle} title="データがありません" />);
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
 });

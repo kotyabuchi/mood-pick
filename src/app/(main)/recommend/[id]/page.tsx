@@ -1,9 +1,10 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
-import { Check, Loader2 } from 'lucide-react';
+import { Check, Loader2, Users } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 
+import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { UserAvatar } from '@/components/ui/user-avatar';
 import { useAuth } from '@/context/auth-context';
@@ -168,10 +169,12 @@ export default function RecommendPage() {
         {followingUsers && followingUsers.length > 0 ? (
           followingUsers.map(renderUserItem)
         ) : (
-          <div className="px-4 py-12 text-center" data-testid="empty-users">
-            <p className="text-text-secondary">
-              フォロー中のユーザーがいません
-            </p>
+          <div data-testid="empty-users">
+            <EmptyState
+              icon={Users}
+              title="フォロー中のユーザーがいません"
+              description="ユーザーをフォローするとおすすめを送れます"
+            />
           </div>
         )}
       </div>

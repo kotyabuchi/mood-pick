@@ -1,9 +1,10 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Bell, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
+import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenHeader } from '@/components/ui/screen-header';
 import {
   useMarkAllAsRead,
@@ -91,8 +92,12 @@ export default function NotificationsPage() {
 
       <div className="pb-8">
         {sections.length === 0 ? (
-          <div className="px-4 py-20 text-center" data-testid="empty-message">
-            <p className="text-text-secondary">通知はまだありません</p>
+          <div data-testid="empty-message">
+            <EmptyState
+              icon={Bell}
+              title="通知はまだありません"
+              description="新しいお知らせがあるとここに届きます"
+            />
           </div>
         ) : (
           sections.map((section) => (

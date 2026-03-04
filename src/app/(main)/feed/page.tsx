@@ -1,11 +1,12 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { AddToWatchlistDialog } from '@/components/ui/add-to-watchlist-dialog';
+import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { StarRating } from '@/components/ui/star-rating';
 import { UserAvatar } from '@/components/ui/user-avatar';
@@ -141,11 +142,12 @@ export default function FeedPage() {
         )}
 
         {!isLoading && !error && feedItems?.length === 0 && (
-          <div className="text-center py-12 px-4">
-            <p className="text-text-secondary text-sm">
-              フォロー中のユーザーのアクティビティがここに表示されます
-            </p>
-          </div>
+          <EmptyState
+            icon={Users}
+            title="フィードはまだ空です"
+            description="ユーザーをフォローするとアクティビティが表示されます"
+            action={{ label: '作品を探してみる', href: '/search' }}
+          />
         )}
 
         {feedItems?.map((item) => (

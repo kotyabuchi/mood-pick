@@ -1,9 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Bookmark, CheckCircle, Loader2, Play } from 'lucide-react';
 
 import { ContentCard } from '@/components/ui/content-card';
+import { EmptyState } from '@/components/ui/empty-state';
 import { SectionDivider } from '@/components/ui/section-divider';
 import { TabBarSegment } from '@/components/ui/tab-bar-segment';
 import { useWatchlist, useWatchlistStats } from '@/hooks/use-watchlist';
@@ -86,51 +87,77 @@ export default function ListPage() {
       </div>
 
       <div className="px-4 space-y-2 pb-8 lg:px-0">
-        {activeTab === 'want' && (
-          <>
-            {urgentItems.length > 0 && (
-              <>
-                <SectionDivider label="まもなく終了" />
-                {urgentItems.map((item) => (
-                  <ContentCard
-                    key={item.watchlistId}
-                    item={item}
-                    variant="horizontal"
-                    showExpiration
-                  />
-                ))}
-                <SectionDivider />
-              </>
-            )}
-            {normalWantItems.map((item) => (
+        {activeTab === 'want' &&
+          (wantItems.length === 0 ? (
+            <EmptyState
+              icon={Bookmark}
+              title="見たい作品がまだありません"
+              description="気になる作品を追加しましょう"
+              action={{ label: '作品を探す', href: '/search' }}
+            />
+          ) : (
+            <>
+              {urgentItems.length > 0 && (
+                <>
+                  <SectionDivider label="まもなく終了" />
+                  {urgentItems.map((item) => (
+                    <ContentCard
+                      key={item.watchlistId}
+                      item={item}
+                      variant="horizontal"
+                      showExpiration
+                    />
+                  ))}
+                  <SectionDivider />
+                </>
+              )}
+              {normalWantItems.map((item) => (
+                <ContentCard
+                  key={item.watchlistId}
+                  item={item}
+                  variant="horizontal"
+                  showExpiration
+                />
+              ))}
+            </>
+          ))}
+
+        {activeTab === 'watching' &&
+          (watchingItems.length === 0 ? (
+            <EmptyState
+              icon={Play}
+              title="視聴中の作品はありません"
+              description="見始めた作品をここで管理できます"
+              action={{ label: '作品を探す', href: '/search' }}
+            />
+          ) : (
+            watchingItems.map((item) => (
               <ContentCard
                 key={item.watchlistId}
                 item={item}
                 variant="horizontal"
-                showExpiration
+                showMemo
               />
-            ))}
-          </>
-        )}
-
-        {activeTab === 'watching' &&
-          watchingItems.map((item) => (
-            <ContentCard
-              key={item.watchlistId}
-              item={item}
-              variant="horizontal"
-              showMemo
-            />
+            ))
           ))}
 
         {activeTab === 'watched' &&
-          watchedItems.map((item) => (
-            <ContentCard
-              key={item.watchlistId}
-              item={item}
-              variant="horizontal"
-              showRating
+          (watchedItems.length === 0 ? (
+            <EmptyState
+              icon={CheckCircle}
+              title="見た作品はまだありません"
+              description="見終わった作品を記録しましょう"
+              action={{ label: '作品を探す', href: '/search' }}
             />
+          ) : (
+            watchedItems.map((item) => (
+              <ContentCard
+                key={item.watchlistId}
+                item={item}
+                variant="horizontal"
+                showRating
+              />
+            ))
           ))}
       </div>
     </div>
