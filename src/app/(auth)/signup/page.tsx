@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useOptimistic, useState, useTransition } from 'react';
 import { ChevronLeft, Mail } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -17,20 +17,19 @@ export default function SignupPage() {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [optimisticError, setOptimisticError] = useOptimistic(error);
   const [showEmailSent, setShowEmailSent] = useState(false);
 
-  const handleSignup = async () => {
-    setError('');
-
+  const handleSignup = () => {
     if (password !== passwordConfirm) {
       setError('パスワードが一致しません');
       return;
     }
 
-    setIsLoading(true);
+    startTransition(async () => {
+      setOptimisticError('');
 
-    try {
       const { error: authError, needsEmailVerification } = await signUp(
         email,
         password,
@@ -43,9 +42,7 @@ export default function SignupPage() {
       } else {
         router.replace('/');
       }
-    } finally {
-      setIsLoading(false);
-    }
+    });
   };
 
   if (showEmailSent) {
@@ -109,12 +106,14 @@ export default function SignupPage() {
         />
       </div>
 
-      {error && <p className="text-error text-xs text-center mb-4">{error}</p>}
+      {optimisticError && (
+        <p className="text-error text-xs text-center mb-4">{optimisticError}</p>
+      )}
 
       <AuthButton
         title="アカウント作成"
         onClick={handleSignup}
-        loading={isLoading}
+        loading={isPending}
         disabled={!email || !password || !passwordConfirm}
       />
     </>

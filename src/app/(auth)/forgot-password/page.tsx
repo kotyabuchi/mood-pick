@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useOptimistic, useState, useTransition } from 'react';
 import { CheckCircle2, ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -15,14 +15,14 @@ export default function ForgotPasswordPage() {
 
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [optimisticError, setOptimisticError] = useOptimistic(error);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleReset = async () => {
-    setError('');
-    setIsLoading(true);
+  const handleReset = () => {
+    startTransition(async () => {
+      setOptimisticError('');
 
-    try {
       const { error: authError } = await resetPassword(email);
 
       if (authError) {
@@ -30,9 +30,7 @@ export default function ForgotPasswordPage() {
       } else {
         setShowSuccess(true);
       }
-    } finally {
-      setIsLoading(false);
-    }
+    });
   };
 
   if (showSuccess) {
@@ -84,12 +82,14 @@ export default function ForgotPasswordPage() {
         />
       </div>
 
-      {error && <p className="text-error text-xs text-center mb-4">{error}</p>}
+      {optimisticError && (
+        <p className="text-error text-xs text-center mb-4">{optimisticError}</p>
+      )}
 
       <AuthButton
         title="リセットリンクを送信"
         onClick={handleReset}
-        loading={isLoading}
+        loading={isPending}
         disabled={!email}
       />
     </>

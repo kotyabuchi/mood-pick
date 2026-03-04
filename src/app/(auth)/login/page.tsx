@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useOptimistic, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -16,22 +16,21 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [optimisticError, setOptimisticError] = useOptimistic(error);
 
-  const handleLogin = async () => {
-    setError('');
-    setIsLoading(true);
+  const handleLogin = () => {
+    startTransition(async () => {
+      setOptimisticError('');
 
-    try {
       const { error: authError } = await signIn(email, password);
       if (authError) {
         setError(getAuthErrorMessage(authError));
-      } else {
-        router.push('/');
+        return;
       }
-    } finally {
-      setIsLoading(false);
-    }
+
+      router.replace('/');
+    });
   };
 
   return (
@@ -57,12 +56,14 @@ export default function LoginPage() {
         />
       </div>
 
-      {error && <p className="text-error text-xs text-center mb-4">{error}</p>}
+      {optimisticError && (
+        <p className="text-error text-xs text-center mb-4">{optimisticError}</p>
+      )}
 
       <AuthButton
         title="ログイン"
         onClick={handleLogin}
-        loading={isLoading}
+        loading={isPending}
         disabled={!email || !password}
       />
 
