@@ -120,6 +120,58 @@ Phase 1 の前提条件。
 - [x] 残存するモックデータ依存がないことを最終確認
 - [x] RLS ポリシーの全体スモークテスト実施 (テスト SQL 作成: `docs/reviews/phase6-rls-smoke-test.md`)
 
+### Phase 7: 気分タグ自動判定
+
+仕様書: 登録系「気分タグ自動判定（ジャンル→気分マッピング）」
+
+- [x] ジャンル→気分タグのマッピングルール定義 (TMDb genre_id → 興奮/切ない/笑い/思考/まったり)
+- [x] `src/lib/tmdb/mood-mapping.ts` — マッピングロジック実装
+- [x] AddToWatchlistDialog で気分タグを自動プリセット (手動変更可能は維持)
+- [x] UI テキスト「気分タグ（自動判定）」+「※ タップで変更できます」表示
+- [x] `useState(isSubmitting)` → `useTransition + useOptimistic` パターンへリファクタ
+- [x] テスト: マッピングロジックの単体テスト
+- [x] codex-debate レビュー: 1件採用 (useEffect エラーリセット条件改善)
+
+### Phase 8: リスト並び替え
+
+仕様書: 管理系「並び替え（追加日/タイトル/終了日/視聴日）」
+
+- [ ] リスト画面に並び替えUI追加 (追加日/タイトル/視聴日)
+- [ ] Supabase クエリに ORDER BY パラメータ追加
+- [ ] `use-watchlist` に sortBy オプション追加
+- [ ] テスト: 並び替え動作確認
+
+### Phase 9: 配信情報連携 (Streaming Availability API)
+
+仕様書: 通知系「配信終了アラート」、作品詳細「配信サービス一覧」
+
+- [ ] Streaming Availability API 調査・API キー取得
+- [ ] `src/app/api/streaming/` — API プロキシ作成
+- [ ] `src/lib/streaming/` — api.ts, mappers.ts
+- [ ] `streaming_availability` テーブル作成 (tmdb_id, service, expires_at, updated_at)
+- [ ] 作品詳細画面に配信サービス一覧・終了予定日を表示
+- [ ] AddToWatchlistDialog に配信情報表示
+- [ ] ホーム画面「配信終了まもなく」セクション追加
+- [ ] 配信終了アラート通知生成 (7日前/3日前/前日) — cron or Edge Function
+- [ ] テスト
+
+### Phase 10: ソーシャル機能拡張
+
+仕様書: ソーシャル系の未実装分
+
+- [ ] 招待リンク生成・共有機能
+- [ ] 招待リンクからの登録 → 自動フォロー確認
+- [ ] リスト公開スコープ設定 (非公開/フォロワーのみ/全体公開) — `profiles` にカラム追加 + RLS 条件分岐
+- [ ] 他人のリスト閲覧 (公開設定に応じた表示)
+- [ ] 設定画面のプライバシーセクション実装
+
+### Phase 11: フィード・通知の強化
+
+仕様書: フィード「コメント機能」、設定「通知設定」
+
+- [ ] フィードのコメント機能 (`comments` テーブル + UI)
+- [ ] 通知設定の細かい ON/OFF (配信終了/フォロー/おすすめ 個別切り替え) — `profiles` or `notification_settings` テーブル
+
 ## 実装パターン (既存に倣う)
 
 新機能は `src/lib/watchlist/` のパターンを踏襲:

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useOptimistic, useState, useTransition } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Loader2, X } from 'lucide-react';
 
@@ -47,41 +47,44 @@ export function AddToWatchlistDialog({
   const [selectedMoods, setSelectedMoods] = useState<MoodId[]>(
     content?.moodTags ?? [],
   );
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const [optimisticError, setOptimisticError] = useOptimistic(error);
 
   useEffect(() => {
-    if (open && content?.moodTags) {
-      setSelectedMoods(content.moodTags);
+    if (open) {
       setError(null);
+      if (content?.moodTags) {
+        setSelectedMoods(content.moodTags);
+      }
     }
   }, [open, content]);
 
-  const handleMoodToggle = useCallback((moodId: MoodId) => {
+  const handleMoodToggle = (moodId: MoodId) => {
     setSelectedMoods((prev) =>
       prev.includes(moodId)
         ? prev.filter((m) => m !== moodId)
         : [...prev, moodId],
     );
-  }, []);
+  };
 
-  const handleAdd = useCallback(async () => {
+  const handleAdd = () => {
     if (!content) return;
 
-    setIsSubmitting(true);
-    setError(null);
-    try {
-      await addToWatchlist.mutateAsync({
-        content: { ...content, moodTags: selectedMoods },
-        status: 'want',
-      });
-      onOpenChange(false);
-    } catch {
-      setError('追加に失敗しました。もう一度お試しください。');
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [content, selectedMoods, addToWatchlist, onOpenChange]);
+    startTransition(async () => {
+      setOptimisticError(null);
+
+      try {
+        await addToWatchlist.mutateAsync({
+          content: { ...content, moodTags: selectedMoods },
+          status: 'want',
+        });
+        onOpenChange(false);
+      } catch {
+        setError('追加に失敗しました。もう一度お試しください。');
+      }
+    });
+  };
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -114,9 +117,9 @@ export function AddToWatchlistDialog({
               </Dialog.Description>
 
               <p className="text-xs font-semibold text-text-secondary mb-2">
-                気分タグ
+                気分タグ（自動判定）
               </p>
-              <div className="flex flex-wrap gap-2 mb-6">
+              <div className="flex flex-wrap gap-2 mb-2">
                 {Moods.map((mood) => (
                   <MoodChip
                     key={mood.id}
@@ -130,9 +133,14 @@ export function AddToWatchlistDialog({
                   />
                 ))}
               </div>
+              <p className="text-[10px] text-text-disabled mb-6">
+                ※ タップで変更できます
+              </p>
 
-              {error && (
-                <p className="text-xs text-error text-center mb-3">{error}</p>
+              {optimisticError && (
+                <p className="text-xs text-error text-center mb-3">
+                  {optimisticError}
+                </p>
               )}
 
               <div className="flex gap-3">
@@ -147,10 +155,10 @@ export function AddToWatchlistDialog({
                 <button
                   type="button"
                   onClick={handleAdd}
-                  disabled={isSubmitting}
+                  disabled={isPending}
                   className="flex-1 py-3 rounded-lg bg-accent text-sm font-semibold text-white hover:bg-accent-hover transition-colors disabled:opacity-50"
                 >
-                  {isSubmitting ? '追加中...' : '追加する'}
+                  {isPending ? '追加中...' : '追加する'}
                 </button>
               </div>
             </>
