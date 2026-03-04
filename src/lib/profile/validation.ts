@@ -17,4 +17,9 @@ export const profileFormSchema = z.object({
   handle: handleSchema.optional(),
 });
 
+export const profileSetupSchema = profileFormSchema.extend({
+  handle: handleSchema,
+});
+
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;
+export type ProfileSetupFormValues = z.infer<typeof profileSetupSchema>;
