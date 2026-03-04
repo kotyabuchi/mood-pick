@@ -29,9 +29,9 @@ export function useAddToWatchlist() {
     }) => api.addWatchlistItem(mapContentToInsertRow(content, status)),
     onMutate: async ({ content, status = 'want' }) => {
       await queryClient.cancelQueries({ queryKey: watchlistKeys.all });
-      const prev = queryClient.getQueryData<WatchlistItem[]>(
-        watchlistKeys.list(status),
-      );
+      const prevQueries = queryClient.getQueriesData<WatchlistItem[]>({
+        queryKey: watchlistKeys.lists(),
+      });
       const optimistic: WatchlistItem = {
         ...content,
         watchlistId: `temp-${Date.now()}`,
@@ -43,18 +43,22 @@ export function useAddToWatchlist() {
         droppedAt: null,
         createdAt: new Date().toISOString(),
       };
-      queryClient.setQueryData<WatchlistItem[]>(
-        watchlistKeys.list(status),
-        (old) => [optimistic, ...(old ?? [])],
-      );
-      return { prev, status };
+      for (const [queryKey, data] of prevQueries) {
+        const params = queryKey[2] as { status?: WatchStatus } | undefined;
+        if (!params?.status || params.status === status) {
+          queryClient.setQueryData<WatchlistItem[]>(queryKey, [
+            optimistic,
+            ...(data ?? []),
+          ]);
+        }
+      }
+      return { prevQueries };
     },
     onError: (_err, _vars, context) => {
       if (context) {
-        queryClient.setQueryData(
-          watchlistKeys.list(context.status),
-          context.prev,
-        );
+        for (const [queryKey, data] of context.prevQueries) {
+          queryClient.setQueryData(queryKey, data);
+        }
       }
     },
     onSettled: () => {

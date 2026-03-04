@@ -8,16 +8,20 @@ import { useSupabaseClient } from './use-supabase';
 import { useAuth } from '@/context/auth-context';
 import { createWatchlistApi, watchlistKeys } from '@/lib/watchlist';
 
-import type { WatchStatus } from '@/types';
+import type { WatchlistSortOption, WatchStatus } from '@/types';
 
-export function useWatchlist(status?: WatchStatus) {
+export function useWatchlist(
+  status?: WatchStatus,
+  options?: { sortBy?: WatchlistSortOption },
+) {
   const { user } = useAuth();
   const supabase = useSupabaseClient();
   const api = useMemo(() => createWatchlistApi(supabase), [supabase]);
+  const sortBy = options?.sortBy;
 
   return useQuery({
-    queryKey: watchlistKeys.list(status),
-    queryFn: () => api.fetchWatchlist(status),
+    queryKey: watchlistKeys.list(status, sortBy),
+    queryFn: () => api.fetchWatchlist(status, { sortBy }),
     enabled: !!user,
   });
 }

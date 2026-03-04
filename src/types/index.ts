@@ -11,6 +11,7 @@ export type StreamingService =
   | 'u-next'
   | 'hulu'
   | 'abema';
+export type WatchlistSortOption = 'created_at' | 'title' | 'watched_at';
 export type FeedActionType = 'watched' | 'watching' | 'want' | 'recommend';
 export type NotificationType = 'expiring' | 'follow' | 'recommendation';
 

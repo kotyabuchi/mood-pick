@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { Bookmark, CheckCircle, Play } from 'lucide-react';
+import { useCallback, useMemo, useState } from 'react';
+import { ArrowUpDown, Bookmark, CheckCircle, Play } from 'lucide-react';
 
 import { ContentCard } from '@/components/ui/content-card';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -11,21 +11,54 @@ import { TabBarSegment } from '@/components/ui/tab-bar-segment';
 import { useWatchlist, useWatchlistStats } from '@/hooks/use-watchlist';
 import { daysUntil } from '@/lib/utils';
 
+import type { WatchlistSortOption } from '@/types';
+
 const TABS = [
   { id: 'want', label: '見たい' },
   { id: 'watching', label: '視聴中' },
   { id: 'watched', label: '見た' },
 ] as const;
 
+const SORT_LABELS: Record<WatchlistSortOption, string> = {
+  created_at: '追加日',
+  title: 'タイトル',
+  watched_at: '視聴日',
+};
+
+function getDefaultSort(tab: string): WatchlistSortOption {
+  return tab === 'watched' ? 'watched_at' : 'created_at';
+}
+
 export default function ListPage() {
   const [activeTab, setActiveTab] = useState('want');
+  const [sortBy, setSortBy] = useState<WatchlistSortOption>(() =>
+    getDefaultSort('want'),
+  );
+
+  const handleTabChange = useCallback((tab: string) => {
+    setActiveTab(tab);
+    setSortBy(getDefaultSort(tab));
+  }, []);
+
+  const wantSortBy = activeTab === 'want' ? sortBy : getDefaultSort('want');
+  const watchingSortBy =
+    activeTab === 'watching' ? sortBy : getDefaultSort('watching');
+  const watchedSortBy =
+    activeTab === 'watched' ? sortBy : getDefaultSort('watched');
 
   const { data: stats } = useWatchlistStats();
-  const { data: wantItems = [], isLoading: wantLoading } = useWatchlist('want');
-  const { data: watchingItems = [], isLoading: watchingLoading } =
-    useWatchlist('watching');
-  const { data: watchedItems = [], isLoading: watchedLoading } =
-    useWatchlist('watched');
+  const { data: wantItems = [], isLoading: wantLoading } = useWatchlist(
+    'want',
+    { sortBy: wantSortBy },
+  );
+  const { data: watchingItems = [], isLoading: watchingLoading } = useWatchlist(
+    'watching',
+    { sortBy: watchingSortBy },
+  );
+  const { data: watchedItems = [], isLoading: watchedLoading } = useWatchlist(
+    'watched',
+    { sortBy: watchedSortBy },
+  );
 
   const isLoading = wantLoading || watchingLoading || watchedLoading;
 
@@ -42,6 +75,14 @@ export default function ListPage() {
       })),
     [stats],
   );
+
+  const sortOptions = useMemo(() => {
+    const options: WatchlistSortOption[] = ['created_at', 'title'];
+    if (activeTab === 'watched') {
+      options.push('watched_at');
+    }
+    return options;
+  }, [activeTab]);
 
   const urgentItems = useMemo(
     () =>
@@ -62,7 +103,6 @@ export default function ListPage() {
   );
 
   if (FORCE_SKELETON || isLoading) {
-    // TEMP: skeleton debug
     return (
       <div className="max-w-4xl mx-auto">
         <div className="px-4 pt-4 pb-2 lg:px-0 lg:pt-6">
@@ -83,8 +123,27 @@ export default function ListPage() {
         <TabBarSegment
           tabs={tabs}
           activeId={activeTab}
-          onTabChange={setActiveTab}
+          onTabChange={handleTabChange}
         />
+      </div>
+
+      <div className="flex items-center gap-2 px-4 mb-3 lg:px-0">
+        <ArrowUpDown className="size-4 text-text-secondary" />
+        <label htmlFor="sort-select" className="text-sm text-text-secondary">
+          並び替え:
+        </label>
+        <select
+          id="sort-select"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value as WatchlistSortOption)}
+          className="bg-surface text-text-primary text-sm rounded-lg border border-surface-light px-2 py-1 focus:outline-none focus:ring-1 focus:ring-accent"
+        >
+          {sortOptions.map((option) => (
+            <option key={option} value={option}>
+              {SORT_LABELS[option]}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="px-4 space-y-2 pb-8 lg:px-0">

@@ -1,7 +1,7 @@
 import { mapRowToWatchlistItem } from './mappers';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { WatchlistItem, WatchStatus } from '@/types';
+import type { WatchlistItem, WatchlistSortOption, WatchStatus } from '@/types';
 import type {
   Database,
   WatchlistItemInsert,
@@ -14,12 +14,22 @@ import type {
 export function createWatchlistApi(client: SupabaseClient<Database>) {
   async function fetchWatchlist(
     status?: WatchStatus,
-    options?: { limit?: number; offset?: number },
+    options?: {
+      sortBy?: WatchlistSortOption;
+      limit?: number;
+      offset?: number;
+    },
   ): Promise<WatchlistItem[]> {
+    const sortBy = options?.sortBy ?? 'created_at';
+    const ascending = sortBy === 'title';
+
     let query = client
       .from('watchlist_items')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order(sortBy, {
+        ascending,
+        ...(sortBy === 'watched_at' ? { nullsFirst: false } : {}),
+      });
 
     if (status) {
       query = query.eq('status', status);
