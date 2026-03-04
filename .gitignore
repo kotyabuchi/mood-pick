@@ -48,3 +48,5 @@ next-env.d.ts
 
 # AI agent review reports
 /docs/reviews/
+
+.vercel

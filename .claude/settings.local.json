@@ -18,7 +18,9 @@
       "Bash(npx supabase gen:*)",
       "Bash(pnpm biome:*)",
       "Bash(codex:*)",
-      "mcp__supabase__execute_sql"
+      "mcp__supabase__execute_sql",
+      "WebFetch(domain:vercel.com)",
+      "Bash(vercel:*)"
     ]
   }
 }
