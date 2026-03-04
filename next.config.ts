@@ -9,12 +9,17 @@ const withSerwist = withSerwistInit({
 });
 
 export default withSerwist({
+  allowedDevOrigins: ['*.trycloudflare.com'],
   turbopack: {},
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'image.tmdb.org',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
       },
     ],
   },

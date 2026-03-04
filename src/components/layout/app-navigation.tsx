@@ -55,7 +55,7 @@ export function AppNavigation() {
         aria-label="モバイルナビゲーション"
         className="lg:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-border z-50"
       >
-        <div className="flex justify-around items-center h-16 px-2">
+        <div className="grid grid-cols-5 items-center h-16">
           {navItems.map((item) => {
             const isActive =
               item.href === '/'
@@ -67,14 +67,14 @@ export function AppNavigation() {
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
-                  'flex flex-col items-center gap-0.5 px-3 py-1 text-[10px] transition-colors',
+                  'flex flex-col items-center py-1 text-[10px] transition-colors',
                   isActive
                     ? 'text-accent'
                     : 'text-text-secondary hover:text-text-primary',
                 )}
               >
-                <item.icon size={20} aria-hidden="true" />
-                <span>{item.label}</span>
+                <item.icon size={22} aria-hidden="true" />
+                <span className="sr-only">{item.label}</span>
               </Link>
             );
           })}
