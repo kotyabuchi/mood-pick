@@ -10,11 +10,11 @@ export default function MainLayout({
 }) {
   return (
     <div className="flex min-h-screen">
-      <ProfileSetupGuard>
-        <AppNavigation />
-        <main id="main-content" className="flex-1 pb-16 lg:pb-0">
-          {children}
-        </main>
+      <ProfileSetupGuard
+        navigation={<AppNavigation />}
+        mainClassName="flex-1 pb-16 lg:pb-0"
+      >
+        {children}
       </ProfileSetupGuard>
     </div>
   );
