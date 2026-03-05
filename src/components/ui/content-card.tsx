@@ -8,11 +8,13 @@ import { StarRating } from './star-rating';
 import { StreamingBadge } from './streaming-badge';
 import { UrgencyBadge } from './urgency-badge';
 
+import { Moods } from '@/constants/theme';
 import { cn } from '@/lib/cn';
 
 import type {
   Content,
   ContentDetail,
+  MoodId,
   SearchResult,
   WatchlistItem,
 } from '@/types';
@@ -21,6 +23,7 @@ interface ContentCardProps {
   item: WatchlistItem | Content | ContentDetail | SearchResult;
   variant: 'horizontal' | 'poster' | 'list-item';
   href?: string;
+  highlightMoods?: MoodId[];
   showExpiration?: boolean;
   showRating?: boolean;
   showMemo?: boolean;
@@ -32,6 +35,7 @@ function ContentCardInner({
   item,
   variant,
   href,
+  highlightMoods,
   showExpiration,
   showRating,
   showMemo,
@@ -86,6 +90,30 @@ function ContentCardInner({
                 </div>
               )}
             </div>
+            {item.moodTags.length > 0 && (
+              <div className="mt-1 flex gap-1 flex-wrap">
+                {Moods.filter((m) => item.moodTags.includes(m.id)).map(
+                  (mood) => {
+                    const Icon = mood.icon;
+                    const highlighted = highlightMoods?.includes(mood.id);
+                    return (
+                      <span
+                        key={mood.id}
+                        className={cn(
+                          'inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px]',
+                          highlighted
+                            ? 'bg-accent-subtle text-accent'
+                            : 'bg-surface-light text-text-secondary',
+                        )}
+                      >
+                        <Icon size={10} className="mr-0.5" aria-hidden="true" />
+                        {mood.shortLabel}
+                      </span>
+                    );
+                  },
+                )}
+              </div>
+            )}
             {showMemo && itemMemo && (
               <p className="text-xs text-text-secondary mt-1 line-clamp-1">
                 {itemMemo}

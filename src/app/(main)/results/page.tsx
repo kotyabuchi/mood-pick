@@ -86,6 +86,7 @@ function ResultsContent() {
               key={item.watchlistId}
               item={item}
               variant="horizontal"
+              highlightMoods={moodIds}
             />
           ))
         )}
