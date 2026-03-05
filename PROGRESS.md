@@ -172,6 +172,22 @@ Phase 1 の前提条件。
 - [ ] フィードのコメント機能 (`comments` テーブル + UI)
 - [ ] 通知設定の細かい ON/OFF (配信終了/フォロー/おすすめ 個別切り替え) — `profiles` or `notification_settings` テーブル
 
+## Fix
+
+### テキスト検索結果の既登録状態が反映されない
+
+**現象**: `search/page.tsx` の TextSearch モードで、既にウォッチリストに登録済みの作品にも「追加」ボタンが同じ見た目で表示され、押すと再度 AddToWatchlistDialog が開く。
+
+**原因**: TextSearch は `useTmdbSearch` で TMDb API の結果をそのまま `ContentCard` に `showAddButton=true` で渡しており、`watchlist_items` との突合をしていない。
+
+**対比**: 詳細ページ (`detail-client.tsx`) では `useWatchlistItem(tmdbId)` で登録状態を取得し、未登録時のみ「見たいに追加」ボタンを表示している。
+
+**関連ファイル**:
+- `src/app/(main)/search/page.tsx` — 検索結果の表示ロジック
+- `src/components/ui/content-card.tsx` — `showAddButton` の表示制御
+- `src/components/ui/add-to-watchlist-dialog.tsx` — Dialog 側にも重複チェックなし
+- `src/hooks/use-watchlist.ts` — `useWatchlistItem(tmdbId)` が既に利用可能
+
 ## 実装パターン (既存に倣う)
 
 新機能は `src/lib/watchlist/` のパターンを踏襲:
