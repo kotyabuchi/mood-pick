@@ -37,7 +37,11 @@ export const Durations = [
   { id: '30min', label: '30分', minutes: 30 },
   { id: '1hour', label: '1時間', minutes: 60 },
   { id: '2hour', label: '2時間', minutes: 120 },
-  { id: 'unlimited', label: '∞', minutes: Number.POSITIVE_INFINITY },
+  {
+    id: 'unlimited',
+    label: '時間を気にしない',
+    minutes: Number.POSITIVE_INFINITY,
+  },
 ] as const;
 
 export const AttentionLevels = [
