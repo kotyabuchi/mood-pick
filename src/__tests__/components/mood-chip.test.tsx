@@ -1,14 +1,16 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { Zap } from 'lucide-react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { MoodChip } from '@/components/ui/mood-chip';
 
-const defaultMood = { id: 'excited', emoji: '🔥', label: 'アツい' };
+const defaultMood = { id: 'excited', icon: Zap, label: 'アツい' };
 
 describe('MoodChip', () => {
-  it('emojiとlabelが表示される', () => {
+  it('アイコンとlabelが表示される', () => {
     render(<MoodChip mood={defaultMood} selected={false} onPress={vi.fn()} />);
-    expect(screen.getByText('🔥')).toBeInTheDocument();
+    const button = screen.getByRole('button');
+    expect(button.querySelector('.lucide-zap')).toBeInTheDocument();
     expect(screen.getByText('アツい')).toBeInTheDocument();
   });
 

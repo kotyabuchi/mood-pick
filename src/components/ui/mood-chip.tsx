@@ -2,13 +2,16 @@
 
 import { cn } from '@/lib/cn';
 
+import type { LucideIcon } from 'lucide-react';
+
 interface MoodChipProps {
-  mood: { id: string; emoji: string; label: string };
+  mood: { id: string; icon: LucideIcon; label: string };
   selected: boolean;
   onPress: () => void;
 }
 
 export function MoodChip({ mood, selected, onPress }: MoodChipProps) {
+  const Icon = mood.icon;
   return (
     <button
       type="button"
@@ -20,7 +23,7 @@ export function MoodChip({ mood, selected, onPress }: MoodChipProps) {
           : 'bg-surface-light border-border text-text-secondary hover:border-text-secondary',
       )}
     >
-      <span className="mr-1">{mood.emoji}</span>
+      <Icon size={14} className="mr-1" aria-hidden="true" />
       {mood.label}
     </button>
   );

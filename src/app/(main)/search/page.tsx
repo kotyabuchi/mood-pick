@@ -134,7 +134,7 @@ export default function SearchPage() {
                   key={mood.id}
                   mood={{
                     id: mood.id,
-                    emoji: mood.emoji,
+                    icon: mood.icon,
                     label: mood.shortLabel,
                   }}
                   selected={selectedMoods.includes(mood.id as MoodId)}

@@ -1,3 +1,5 @@
+import { Brain, Coffee, HeartCrack, Laugh, Zap } from 'lucide-react';
+
 export const Colors = {
   background: '#0D0D0D',
   surface: '#1A1A1A',
@@ -19,11 +21,16 @@ export const Colors = {
 } as const;
 
 export const Moods = [
-  { id: 'excited', emoji: '😆', label: '興奮したい', shortLabel: '興奮' },
-  { id: 'sad', emoji: '😢', label: '切ない気分', shortLabel: '切ない' },
-  { id: 'funny', emoji: '😂', label: '笑いたい', shortLabel: '笑い' },
-  { id: 'think', emoji: '🤔', label: '考えたい', shortLabel: '思考' },
-  { id: 'chill', emoji: '🫠', label: 'まったりしたい', shortLabel: 'まったり' },
+  { id: 'excited', icon: Zap, label: '興奮したい', shortLabel: '興奮' },
+  { id: 'sad', icon: HeartCrack, label: '切ない気分', shortLabel: '切ない' },
+  { id: 'funny', icon: Laugh, label: '笑いたい', shortLabel: '笑い' },
+  { id: 'think', icon: Brain, label: '考えたい', shortLabel: '思考' },
+  {
+    id: 'chill',
+    icon: Coffee,
+    label: 'まったりしたい',
+    shortLabel: 'まったり',
+  },
 ] as const;
 
 export const Durations = [

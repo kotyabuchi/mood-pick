@@ -215,7 +215,7 @@ export function DetailClient({ tmdbId, contentType }: DetailClientProps) {
                     key={mood.id}
                     mood={{
                       id: mood.id,
-                      emoji: mood.emoji,
+                      icon: mood.icon,
                       label: mood.shortLabel,
                     }}
                     selected
