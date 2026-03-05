@@ -54,14 +54,23 @@ export default function SearchPage() {
     setSelectedAttention((prev) => (prev === attentionId ? null : attentionId));
   }, []);
 
+  const hasAnyFilter =
+    selectedMoods.length > 0 || !!selectedDuration || !!selectedAttention;
+
   const handleSearch = useCallback(() => {
-    if (selectedMoods.length === 0) return;
+    if (!hasAnyFilter) return;
     const params = new URLSearchParams();
-    params.set('moods', selectedMoods.join(','));
+    if (selectedMoods.length > 0) params.set('moods', selectedMoods.join(','));
     if (selectedDuration) params.set('duration', selectedDuration);
     if (selectedAttention) params.set('attention', selectedAttention);
     router.push(`/results?${params.toString()}`);
-  }, [selectedMoods, selectedDuration, selectedAttention, router]);
+  }, [
+    hasAnyFilter,
+    selectedMoods,
+    selectedDuration,
+    selectedAttention,
+    router,
+  ]);
 
   return (
     <div className="max-w-4xl mx-auto relative min-h-screen">
@@ -182,10 +191,10 @@ export default function SearchPage() {
           <button
             type="button"
             onClick={handleSearch}
-            disabled={selectedMoods.length === 0}
+            disabled={!hasAnyFilter}
             className={cn(
               'w-full py-3 rounded-lg text-sm font-semibold transition-colors',
-              selectedMoods.length > 0
+              hasAnyFilter
                 ? 'bg-accent text-white hover:bg-accent-hover'
                 : 'bg-surface-light text-text-disabled cursor-not-allowed',
             )}
