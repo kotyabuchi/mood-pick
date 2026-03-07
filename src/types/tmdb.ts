@@ -73,3 +73,25 @@ export interface TmdbTvDetail {
   number_of_seasons: number;
   number_of_episodes: number;
 }
+
+/** Watch Provider 個別プロバイダ */
+export interface TmdbWatchProvider {
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
+  display_priority: number;
+}
+
+/** Watch Provider リージョン別データ */
+export interface TmdbWatchProviderRegion {
+  link: string;
+  flatrate?: TmdbWatchProvider[];
+  rent?: TmdbWatchProvider[];
+  buy?: TmdbWatchProvider[];
+}
+
+/** Watch Providers APIレスポンス */
+export interface TmdbWatchProvidersResponse {
+  id: number;
+  results: Record<string, TmdbWatchProviderRegion>;
+}

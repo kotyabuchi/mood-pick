@@ -13,6 +13,8 @@ import type {
   TmdbSearchMultiResult,
   TmdbSearchTvResult,
   TmdbTvDetail,
+  TmdbWatchProviderRegion,
+  TmdbWatchProvidersResponse,
 } from '@/types/tmdb';
 
 /**
@@ -85,4 +87,19 @@ export async function getTvDetail(
     signal,
   );
   return mapTvDetailToContent(data);
+}
+
+/**
+ * 配信サービス情報取得（日本リージョン） — Route Handler 経由
+ */
+export async function getWatchProviders(
+  tmdbId: number,
+  type: 'movie' | 'tv',
+  signal?: AbortSignal,
+): Promise<TmdbWatchProviderRegion | null> {
+  const data = await tmdbRouteHandlerFetch<TmdbWatchProvidersResponse>(
+    `/api/tmdb/${type}/${tmdbId}/watch-providers`,
+    signal,
+  );
+  return data.results.JP ?? null;
 }

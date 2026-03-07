@@ -132,28 +132,38 @@ Phase 1 の前提条件。
 - [x] テスト: マッピングロジックの単体テスト
 - [x] codex-debate レビュー: 1件採用 (useEffect エラーリセット条件改善)
 
-### Phase 8: リスト並び替え
+### Phase 8: リスト並び替え ✅
 
 仕様書: 管理系「並び替え（追加日/タイトル/終了日/視聴日）」
 
-- [ ] リスト画面に並び替えUI追加 (追加日/タイトル/視聴日)
-- [ ] Supabase クエリに ORDER BY パラメータ追加
-- [ ] `use-watchlist` に sortBy オプション追加
-- [ ] テスト: 並び替え動作確認
+- [x] `WatchlistSortOption` 型定義 (`'created_at' | 'title' | 'watched_at'`)
+- [x] `fetchWatchlist` に sortBy パラメータ追加 (ascending/descending、nullsFirst 対応)
+- [x] `watchlistKeys.list()` に sortBy 含むキャッシュキー追加
+- [x] `useWatchlist` に sortBy オプション追加
+- [x] リスト画面に並び替えUI追加 (select要素 + タブ切替時デフォルトソート連動)
+- [x] テスト: watchlist-api sortBy (3件), use-watchlist sortBy (2件), list-screen sortBy (1件) — 全合格
+- [x] pnpm check / build / test 全パス (42ファイル, 312テスト)
 
-### Phase 9: 配信情報連携 (Streaming Availability API)
+### Phase 9: 配信情報連携 ✅
 
-仕様書: 通知系「配信終了アラート」、作品詳細「配信サービス一覧」
+仕様書: 作品詳細「配信サービス一覧」（TMDb Watch Providers API 使用）
 
-- [ ] Streaming Availability API 調査・API キー取得
-- [ ] `src/app/api/streaming/` — API プロキシ作成
-- [ ] `src/lib/streaming/` — api.ts, mappers.ts
-- [ ] `streaming_availability` テーブル作成 (tmdb_id, service, expires_at, updated_at)
-- [ ] 作品詳細画面に配信サービス一覧・終了予定日を表示
-- [ ] AddToWatchlistDialog に配信情報表示
-- [ ] ホーム画面「配信終了まもなく」セクション追加
-- [ ] 配信終了アラート通知生成 (7日前/3日前/前日) — cron or Edge Function
-- [ ] テスト
+- [x] `src/app/api/tmdb/[type]/[id]/watch-providers/route.ts` — API プロキシ (Zod validation, 1h cache, 10s timeout)
+- [x] `src/lib/tmdb/client.ts` → `getWatchProviders()` — JP リージョン抽出
+- [x] `src/hooks/use-watch-providers.ts` — React Query wrapper (1h staleTime)
+- [x] `src/components/ui/bottom-sheet.tsx` — 汎用 BottomSheet (Radix Dialog)
+- [x] `src/components/ui/watch-providers-sheet.tsx` — 定額/レンタル/購入セクション表示 + エラー時再試行
+- [x] `src/types/tmdb.ts` — TmdbWatchProvider, TmdbWatchProviderRegion 型
+- [x] `src/app/(main)/detail/[id]/detail-client.tsx` — 「今すぐ見る」→ WatchProvidersSheet 統合 (条件マウント)
+- [x] テスト: watch-providers client (5件), use-watch-providers hook (4件) — 全合格
+- [x] codex-debate レビュー: 2件採用 (条件マウント, エラー表示分離)
+- [x] pnpm check / build / test 全パス (44ファイル, 321テスト)
+
+**スコープ外（TMDb API では expiresAt 取得不可のため、別 Phase に移行）:**
+- `streaming_availability` テーブル作成
+- ホーム画面「配信終了まもなく」セクション
+- 配信終了アラート通知生成 (7日前/3日前/前日)
+- AddToWatchlistDialog に配信情報表示
 
 ### Phase 10: ソーシャル機能拡張
 

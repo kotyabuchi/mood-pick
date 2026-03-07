@@ -12,6 +12,7 @@ import { MoodChip } from '@/components/ui/mood-chip';
 import { DetailSkeleton, FORCE_SKELETON } from '@/components/ui/skeletons';
 import { StatusChangeDialog } from '@/components/ui/status-change-dialog';
 import { StreamingBadge } from '@/components/ui/streaming-badge';
+import { WatchProvidersSheet } from '@/components/ui/watch-providers-sheet';
 import { Moods } from '@/constants/theme';
 import { useContentDetail } from '@/hooks/use-content-detail';
 import { useWatchlistItem } from '@/hooks/use-watchlist';
@@ -41,6 +42,7 @@ export function DetailClient({ tmdbId, contentType }: DetailClientProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
+  const [watchProvidersOpen, setWatchProvidersOpen] = useState(false);
 
   const handleBack = useCallback(() => {
     router.back();
@@ -276,6 +278,7 @@ export function DetailClient({ tmdbId, contentType }: DetailClientProps) {
         </button>
         <button
           type="button"
+          onClick={() => setWatchProvidersOpen(true)}
           className="flex-1 py-3 rounded-lg bg-accent text-sm font-semibold text-white hover:bg-accent-hover transition-colors"
         >
           今すぐ見る
@@ -294,6 +297,15 @@ export function DetailClient({ tmdbId, contentType }: DetailClientProps) {
           onOpenChange={setStatusDialogOpen}
           tmdbId={tmdbId}
           currentStatus={watchlistItem.status}
+        />
+      )}
+
+      {watchProvidersOpen && (
+        <WatchProvidersSheet
+          open={watchProvidersOpen}
+          onOpenChange={setWatchProvidersOpen}
+          tmdbId={tmdbId}
+          contentType={type === 'anime' ? 'tv' : type}
         />
       )}
     </div>
