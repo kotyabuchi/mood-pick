@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Settings } from 'lucide-react';
+import { GearIcon } from '@phosphor-icons/react/ssr';
 import { describe, expect, it, vi } from 'vitest';
 
 import { ScreenHeader } from '@/components/ui/screen-header';
@@ -53,7 +53,7 @@ describe('ScreenHeader', () => {
     render(
       <ScreenHeader
         title="テスト"
-        rightIcon={Settings}
+        rightIcon={GearIcon}
         onRightPress={onRightPress}
       />,
     );
@@ -65,7 +65,7 @@ describe('ScreenHeader', () => {
     render(
       <ScreenHeader
         title="テスト"
-        rightIcon={Settings}
+        rightIcon={GearIcon}
         onRightPress={onRightPress}
       />,
     );
@@ -74,7 +74,7 @@ describe('ScreenHeader', () => {
   });
 
   it('rightIconのみでonRightPressがない場合、右ボタンが非表示', () => {
-    render(<ScreenHeader title="テスト" rightIcon={Settings} />);
+    render(<ScreenHeader title="テスト" rightIcon={GearIcon} />);
     expect(screen.queryByTestId('right-button')).not.toBeInTheDocument();
   });
 });

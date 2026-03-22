@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import * as Switch from '@radix-ui/react-switch';
-import { ChevronRight } from 'lucide-react';
+import { CaretRightIcon } from '@phosphor-icons/react/ssr';
 import { useRouter } from 'next/navigation';
 
 import { ScreenHeader } from '@/components/ui/screen-header';
@@ -151,7 +151,7 @@ function SettingRow({
       className="flex items-center justify-between w-full px-4 py-3 hover:bg-surface-light transition-colors lg:px-0"
     >
       <span className="text-sm text-text-primary">{label}</span>
-      <ChevronRight size={20} className="text-text-secondary" />
+      <CaretRightIcon size={20} className="text-text-secondary" />
     </button>
   );
 }

@@ -1,7 +1,10 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Search, SearchX, XCircle } from 'lucide-react';
+import {
+  MagnifyingGlassIcon,
+  XCircleIcon,
+} from '@phosphor-icons/react/ssr';
 import { useRouter } from 'next/navigation';
 
 import { AddToWatchlistDialog } from '@/components/ui/add-to-watchlist-dialog';
@@ -77,7 +80,7 @@ export default function SearchPage() {
       {/* 検索入力 */}
       <div className="px-4 pt-4 pb-2 lg:px-0 lg:pt-6">
         <div className="flex items-center bg-surface-light rounded-lg px-3 py-2.5">
-          <Search size={20} className="text-text-disabled shrink-0" />
+          <MagnifyingGlassIcon size={20} className="text-text-disabled shrink-0" />
           <input
             type="text"
             className="flex-1 ml-2 bg-transparent text-sm text-text-primary placeholder:text-text-disabled outline-none"
@@ -91,7 +94,7 @@ export default function SearchPage() {
               onClick={() => setSearchQuery('')}
               className="text-text-disabled hover:text-text-secondary"
             >
-              <XCircle size={20} />
+              <XCircleIcon size={20} />
             </button>
           )}
         </div>
@@ -116,7 +119,7 @@ export default function SearchPage() {
             results.length === 0 &&
             debouncedQuery.length >= 2 && (
               <EmptyState
-                icon={SearchX}
+                icon={MagnifyingGlassIcon}
                 title={`「${debouncedQuery}」に一致する作品が見つかりません`}
                 description="別のキーワードで検索してみてください"
               />

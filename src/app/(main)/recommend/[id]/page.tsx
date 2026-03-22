@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
-import { Check, Loader2, Users } from 'lucide-react';
+import { CheckIcon, SpinnerGapIcon, UsersIcon } from '@phosphor-icons/react/ssr';
 import { useParams, useRouter } from 'next/navigation';
 
 import { EmptyState } from '@/components/ui/empty-state';
@@ -109,7 +109,7 @@ export default function RecommendPage() {
               isSelected ? 'bg-accent border-accent' : 'border-text-secondary',
             )}
           >
-            {isSelected && <Check size={16} className="text-white" />}
+            {isSelected && <CheckIcon size={16} className="text-white" />}
           </div>
           <UserAvatar uri={item.avatarUrl} name={item.name} size={40} />
           <div className="flex-1 ml-3 text-left min-w-0">
@@ -168,7 +168,7 @@ export default function RecommendPage() {
         ) : (
           <div data-testid="empty-users">
             <EmptyState
-              icon={Users}
+              icon={UsersIcon}
               title="フォロー中のユーザーがいません"
               description="ユーザーをフォローするとおすすめを送れます"
             />
@@ -203,7 +203,7 @@ export default function RecommendPage() {
           )}
         >
           {isSending ? (
-            <Loader2 className="w-4 h-4 animate-spin mx-auto" />
+            <SpinnerGapIcon className="w-4 h-4 animate-spin mx-auto" />
           ) : (
             'おすすめを送る'
           )}

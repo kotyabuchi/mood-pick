@@ -1,7 +1,7 @@
 'use client';
 
 import { useOptimistic, useState, useTransition } from 'react';
-import { ChevronLeft, Mail } from 'lucide-react';
+import { CaretLeftIcon, EnvelopeSimpleIcon } from '@phosphor-icons/react/ssr';
 import { useRouter } from 'next/navigation';
 
 import { AuthButton } from '@/components/ui/auth-button';
@@ -48,7 +48,7 @@ export default function SignupPage() {
   if (showEmailSent) {
     return (
       <div className="flex flex-col items-center">
-        <Mail size={64} className="text-accent" />
+        <EnvelopeSimpleIcon size={64} className="text-accent" />
         <h2 className="text-lg font-bold text-text-primary text-center mt-6 mb-4">
           確認メールを送信しました
         </h2>
@@ -73,7 +73,7 @@ export default function SignupPage() {
           className="text-text-primary hover:text-text-secondary transition-colors"
           data-testid="back-button"
         >
-          <ChevronLeft size={24} />
+          <CaretLeftIcon size={24} />
         </button>
       </div>
 

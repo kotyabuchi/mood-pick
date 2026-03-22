@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Bell } from 'lucide-react';
+import { BellIcon } from '@phosphor-icons/react/ssr';
 import Link from 'next/link';
 
 import { EmptyState } from '@/components/ui/empty-state';
@@ -94,7 +94,7 @@ export default function NotificationsPage() {
         {sections.length === 0 ? (
           <div data-testid="empty-message">
             <EmptyState
-              icon={Bell}
+              icon={BellIcon}
               title="通知はまだありません"
               description="新しいお知らせがあるとここに届きます"
             />

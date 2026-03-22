@@ -1,7 +1,7 @@
 'use client';
 
 import * as Dialog from '@radix-ui/react-dialog';
-import { X } from 'lucide-react';
+import { XIcon } from '@phosphor-icons/react/ssr';
 
 import { cn } from '@/lib/cn';
 
@@ -37,7 +37,7 @@ export function BottomSheet({
           )}
         >
           <Dialog.Close className="absolute top-4 right-4 text-text-secondary hover:text-text-primary">
-            <X size={20} />
+            <XIcon size={20} />
           </Dialog.Close>
 
           {title && (

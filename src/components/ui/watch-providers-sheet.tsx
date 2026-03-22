@@ -1,6 +1,6 @@
 'use client';
 
-import { ExternalLink } from 'lucide-react';
+import { ArrowSquareOutIcon } from '@phosphor-icons/react/ssr';
 import Image from 'next/image';
 
 import { BottomSheet } from './bottom-sheet';
@@ -126,7 +126,7 @@ export function WatchProvidersSheet({
             className="flex items-center justify-center gap-2 w-full py-3 rounded-lg border border-border text-sm font-semibold text-text-primary hover:bg-surface-light transition-colors"
           >
             JustWatchで開く
-            <ExternalLink size={16} />
+            <ArrowSquareOutIcon size={16} />
           </a>
 
           <p className="text-[10px] text-text-disabled text-center">

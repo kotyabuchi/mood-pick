@@ -1,7 +1,12 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Bell, Film } from 'lucide-react';
+import {
+  BellIcon,
+  FilmSlateIcon,
+  PlayIcon,
+  WarningIcon,
+} from '@phosphor-icons/react/ssr';
 import Link from 'next/link';
 
 import { ContentCard } from '@/components/ui/content-card';
@@ -44,7 +49,7 @@ export default function HomePage() {
           className="relative text-text-primary hover:text-text-secondary transition-colors"
           data-testid="notification-bell"
         >
-          <Bell size={24} />
+          <BellIcon size={24} />
           <NotificationBadge />
         </Link>
       </div>
@@ -53,7 +58,7 @@ export default function HomePage() {
         <HomePageSkeleton />
       ) : watchingItems.length === 0 && expiringItems.length === 0 ? (
         <EmptyState
-          icon={Film}
+          icon={FilmSlateIcon}
           title="まだ作品がありません"
           description="気分に合わせて作品を探してみましょう"
           action={{ label: '作品を探す', href: '/search' }}
@@ -64,7 +69,7 @@ export default function HomePage() {
           {watchingItems.length > 0 && (
             <HorizontalCarousel
               title="視聴中"
-              icon={<span className="text-lg mr-1">▶</span>}
+              icon={<PlayIcon size={18} weight="fill" className="mr-1" />}
               count={watchingItems.length}
               showSeeAll
               onSeeAll={() => {}}
@@ -81,7 +86,7 @@ export default function HomePage() {
           {expiringItems.length > 0 && (
             <HorizontalCarousel
               title="配信終了まもなく"
-              icon={<span className="text-lg mr-1">⚠</span>}
+              icon={<WarningIcon size={18} weight="fill" className="mr-1" />}
               count={expiringItems.length}
             >
               {expiringItems.map((item) => {

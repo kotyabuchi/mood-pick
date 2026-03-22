@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Camera, Loader2 } from 'lucide-react';
+import { CameraIcon, SpinnerGapIcon } from '@phosphor-icons/react/ssr';
 import { useRouter } from 'next/navigation';
 
 import { AuthButton } from '@/components/ui/auth-button';
@@ -157,7 +157,7 @@ export default function ProfileSetupPage() {
   if (profileLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 size={32} className="animate-spin text-accent" />
+        <SpinnerGapIcon size={32} className="animate-spin text-accent" />
       </div>
     );
   }
@@ -187,7 +187,7 @@ export default function ProfileSetupPage() {
               size={80}
             />
             <div className="absolute bottom-0 right-0 bg-accent rounded-full p-1.5">
-              <Camera size={14} className="text-white" />
+              <CameraIcon size={14} className="text-white" />
             </div>
           </button>
           <input

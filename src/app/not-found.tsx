@@ -1,10 +1,10 @@
-import { FileQuestion } from 'lucide-react';
+import { QuestionIcon } from '@phosphor-icons/react/ssr';
 import Link from 'next/link';
 
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 text-center">
-      <FileQuestion size={64} className="text-text-disabled mb-6" />
+      <QuestionIcon size={64} className="text-text-disabled mb-6" />
       <h1 className="text-2xl font-bold text-text-primary mb-2">
         ページが見つかりません
       </h1>

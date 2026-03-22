@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useOptimistic, useState, useTransition } from 'react';
+import { SpinnerGapIcon, XIcon } from '@phosphor-icons/react/ssr';
 import * as Dialog from '@radix-ui/react-dialog';
-import { Loader2, X } from 'lucide-react';
 
 import { MoodChip } from './mood-chip';
 
@@ -92,12 +92,12 @@ export function AddToWatchlistDialog({
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60 data-[state=open]:animate-in data-[state=open]:fade-in data-[state=closed]:animate-out data-[state=closed]:fade-out" />
         <Dialog.Content className="fixed bottom-0 left-0 right-0 z-50 lg:bottom-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:max-w-md lg:rounded-xl bg-surface rounded-t-2xl px-6 pt-6 pb-8 data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom lg:data-[state=open]:slide-in-from-bottom-0 lg:data-[state=open]:fade-in">
           <Dialog.Close className="absolute top-4 right-4 text-text-secondary hover:text-text-primary">
-            <X size={20} />
+            <XIcon size={20} />
           </Dialog.Close>
 
           {isLoading ? (
             <div className="flex justify-center py-8">
-              <Loader2
+              <SpinnerGapIcon
                 size={32}
                 className="animate-spin text-accent"
                 data-testid="loading-indicator"

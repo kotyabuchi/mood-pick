@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Users } from 'lucide-react';
+import { UsersIcon } from '@phosphor-icons/react/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -139,7 +139,7 @@ export default function FeedPage() {
         )}
         {!isLoading && !error && feedItems?.length === 0 && (
           <EmptyState
-            icon={Users}
+            icon={UsersIcon}
             title="フィードはまだ空です"
             description="ユーザーをフォローするとアクティビティが表示されます"
             action={{ label: '作品を探してみる', href: '/search' }}

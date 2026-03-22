@@ -1,6 +1,6 @@
 'use client';
 
-import { Film, Settings } from 'lucide-react';
+import { FilmSlateIcon, GearIcon } from '@phosphor-icons/react/ssr';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -31,7 +31,7 @@ export default function ProfilePage() {
       <div className="max-w-4xl mx-auto">
         <ScreenHeader
           title="プロフィール"
-          rightIcon={Settings}
+          rightIcon={GearIcon}
           onRightPress={() => router.push('/settings')}
         />
         <ProfileSkeleton />
@@ -43,7 +43,7 @@ export default function ProfilePage() {
     <div className="max-w-4xl mx-auto">
       <ScreenHeader
         title="プロフィール"
-        rightIcon={Settings}
+        rightIcon={GearIcon}
         onRightPress={() => router.push('/settings')}
       />
 
@@ -136,7 +136,7 @@ export default function ProfilePage() {
               最近見た作品
             </h2>
             <EmptyState
-              icon={Film}
+              icon={FilmSlateIcon}
               title="まだ見た作品がありません"
               description="作品を見たら記録してみましょう"
               action={{ label: '作品を探す', href: '/search' }}

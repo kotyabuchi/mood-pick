@@ -1,6 +1,6 @@
 'use client';
 
-import { UserIcon } from 'lucide-react';
+import { UserIcon } from '@phosphor-icons/react/ssr';
 import { useParams } from 'next/navigation';
 
 import { EmptyState } from '@/components/ui/empty-state';

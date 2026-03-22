@@ -1,6 +1,10 @@
 import Link from 'next/link';
+import type { ComponentType } from 'react';
 
-import type { LucideIcon } from 'lucide-react';
+type IconComponent = ComponentType<{
+  size?: string | number;
+  className?: string;
+}>;
 
 interface EmptyStateAction {
   label: string;
@@ -8,7 +12,7 @@ interface EmptyStateAction {
 }
 
 interface EmptyStateProps {
-  icon: LucideIcon;
+  icon: IconComponent;
   title: string;
   description?: string;
   action?: EmptyStateAction;

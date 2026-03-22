@@ -1,4 +1,10 @@
-import { Brain, Coffee, HeartCrack, Laugh, Zap } from 'lucide-react';
+import {
+  BrainIcon,
+  CoffeeIcon,
+  HeartBreakIcon,
+  LightningIcon,
+  SmileyIcon,
+} from '@phosphor-icons/react/ssr';
 
 export const Colors = {
   background: '#0D0D0D',
@@ -21,13 +27,13 @@ export const Colors = {
 } as const;
 
 export const Moods = [
-  { id: 'excited', icon: Zap, label: '興奮したい', shortLabel: '興奮' },
-  { id: 'sad', icon: HeartCrack, label: '切ない気分', shortLabel: '切ない' },
-  { id: 'funny', icon: Laugh, label: '笑いたい', shortLabel: '笑い' },
-  { id: 'think', icon: Brain, label: '考えたい', shortLabel: '思考' },
+  { id: 'excited', icon: LightningIcon, label: '興奮したい', shortLabel: '興奮' },
+  { id: 'sad', icon: HeartBreakIcon, label: '切ない気分', shortLabel: '切ない' },
+  { id: 'funny', icon: SmileyIcon, label: '笑いたい', shortLabel: '笑い' },
+  { id: 'think', icon: BrainIcon, label: '考えたい', shortLabel: '思考' },
   {
     id: 'chill',
-    icon: Coffee,
+    icon: CoffeeIcon,
     label: 'まったりしたい',
     shortLabel: 'まったり',
   },

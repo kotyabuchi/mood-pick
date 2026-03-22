@@ -1,16 +1,16 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Zap } from 'lucide-react';
+import { LightningIcon } from '@phosphor-icons/react/ssr';
 import { describe, expect, it, vi } from 'vitest';
 
 import { MoodChip } from '@/components/ui/mood-chip';
 
-const defaultMood = { id: 'excited', icon: Zap, label: 'アツい' };
+const defaultMood = { id: 'excited', icon: LightningIcon, label: 'アツい' };
 
 describe('MoodChip', () => {
   it('アイコンとlabelが表示される', () => {
     render(<MoodChip mood={defaultMood} selected={false} onPress={vi.fn()} />);
     const button = screen.getByRole('button');
-    expect(button.querySelector('.lucide-zap')).toBeInTheDocument();
+    expect(button.querySelector('svg')).toBeInTheDocument();
     expect(screen.getByText('アツい')).toBeInTheDocument();
   });
 

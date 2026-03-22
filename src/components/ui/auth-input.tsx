@@ -1,7 +1,7 @@
 'use client';
 
 import { useId, useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { EyeIcon, EyeSlashIcon } from '@phosphor-icons/react/ssr';
 
 import { cn } from '@/lib/cn';
 
@@ -61,7 +61,7 @@ export function AuthInput({
             data-testid="password-toggle"
             className="absolute right-3 top-1/2 -translate-y-1/2 text-text-disabled hover:text-text-secondary transition-colors"
           >
-            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPassword ? <EyeSlashIcon size={20} /> : <EyeIcon size={20} />}
           </button>
         )}
       </div>

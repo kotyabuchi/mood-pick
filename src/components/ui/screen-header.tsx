@@ -1,16 +1,20 @@
 'use client';
 
-import { ChevronLeft } from 'lucide-react';
+import { CaretLeftIcon } from '@phosphor-icons/react/ssr';
 import { useRouter } from 'next/navigation';
 
-import type { LucideIcon } from 'lucide-react';
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
+
+type IconComponent = ComponentType<{
+  size?: string | number;
+  className?: string;
+}>;
 
 interface ScreenHeaderProps {
   title: string;
   onBack?: () => void;
   showBack?: boolean;
-  rightIcon?: LucideIcon;
+  rightIcon?: IconComponent;
   onRightPress?: () => void;
   rightAction?: ReactNode;
 }
@@ -37,7 +41,7 @@ export function ScreenHeader({
             data-testid="back-button"
             className="text-text-primary hover:text-text-secondary transition-colors"
           >
-            <ChevronLeft size={24} />
+            <CaretLeftIcon size={24} />
           </button>
         )}
       </div>

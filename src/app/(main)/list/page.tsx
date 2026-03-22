@@ -1,7 +1,12 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
-import { ArrowUpDown, Bookmark, CheckCircle, Play } from 'lucide-react';
+import {
+  ArrowsDownUpIcon,
+  BookmarkSimpleIcon,
+  CheckCircleIcon,
+  PlayIcon,
+} from '@phosphor-icons/react/ssr';
 
 import { ContentCard } from '@/components/ui/content-card';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -128,7 +133,7 @@ export default function ListPage() {
       </div>
 
       <div className="flex items-center gap-2 px-4 mb-3 lg:px-0">
-        <ArrowUpDown className="size-4 text-text-secondary" />
+        <ArrowsDownUpIcon className="size-4 text-text-secondary" />
         <label htmlFor="sort-select" className="text-sm text-text-secondary">
           並び替え:
         </label>
@@ -150,7 +155,7 @@ export default function ListPage() {
         {activeTab === 'want' &&
           (wantItems.length === 0 ? (
             <EmptyState
-              icon={Bookmark}
+              icon={BookmarkSimpleIcon}
               title="見たい作品がまだありません"
               description="気になる作品を追加しましょう"
               action={{ label: '作品を探す', href: '/search' }}
@@ -185,7 +190,7 @@ export default function ListPage() {
         {activeTab === 'watching' &&
           (watchingItems.length === 0 ? (
             <EmptyState
-              icon={Play}
+              icon={PlayIcon}
               title="視聴中の作品はありません"
               description="見始めた作品をここで管理できます"
               action={{ label: '作品を探す', href: '/search' }}
@@ -204,7 +209,7 @@ export default function ListPage() {
         {activeTab === 'watched' &&
           (watchedItems.length === 0 ? (
             <EmptyState
-              icon={CheckCircle}
+              icon={CheckCircleIcon}
               title="見た作品はまだありません"
               description="見終わった作品を記録しましょう"
               action={{ label: '作品を探す', href: '/search' }}

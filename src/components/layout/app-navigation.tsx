@@ -1,17 +1,23 @@
 'use client';
 
-import { Home, List, Search, User, Users } from 'lucide-react';
+import {
+  HouseIcon,
+  ListIcon,
+  MagnifyingGlassIcon,
+  UserIcon,
+  UsersIcon,
+} from '@phosphor-icons/react/ssr';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/cn';
 
 const navItems = [
-  { href: '/', icon: Home, label: 'ホーム' },
-  { href: '/list', icon: List, label: 'リスト' },
-  { href: '/search', icon: Search, label: '検索' },
-  { href: '/feed', icon: Users, label: 'フィード' },
-  { href: '/profile', icon: User, label: 'プロフィール' },
+  { href: '/', icon: HouseIcon, label: 'ホーム' },
+  { href: '/list', icon: ListIcon, label: 'リスト' },
+  { href: '/search', icon: MagnifyingGlassIcon, label: '検索' },
+  { href: '/feed', icon: UsersIcon, label: 'フィード' },
+  { href: '/profile', icon: UserIcon, label: 'プロフィール' },
 ];
 
 export function AppNavigation() {

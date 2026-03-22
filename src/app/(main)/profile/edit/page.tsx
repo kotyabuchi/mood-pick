@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Camera } from 'lucide-react';
+import { CameraIcon } from '@phosphor-icons/react/ssr';
 import { useRouter } from 'next/navigation';
 
 import { AuthButton } from '@/components/ui/auth-button';
@@ -195,7 +195,7 @@ export default function ProfileEditPage() {
               size={80}
             />
             <div className="absolute bottom-0 right-0 bg-accent rounded-full p-1.5">
-              <Camera size={14} className="text-white" />
+              <CameraIcon size={14} className="text-white" />
             </div>
           </button>
           <input

@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { FireIcon } from '@phosphor-icons/react/ssr';
 import { describe, expect, it, vi } from 'vitest';
 
 import { HorizontalCarousel } from '@/components/ui/horizontal-carousel';
@@ -76,7 +77,7 @@ describe('HorizontalCarousel', () => {
     render(
       <HorizontalCarousel
         title="テスト"
-        icon={<span data-testid="icon">🔥</span>}
+        icon={<FireIcon data-testid="icon" size={16} weight="fill" />}
       >
         <div>子要素</div>
       </HorizontalCarousel>,

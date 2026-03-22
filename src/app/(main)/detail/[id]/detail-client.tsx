@@ -1,7 +1,11 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
-import { AlertCircle, ChevronLeft, Ellipsis } from 'lucide-react';
+import {
+  CaretLeftIcon,
+  DotsThreeIcon,
+  WarningCircleIcon,
+} from '@phosphor-icons/react/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -83,10 +87,10 @@ export function DetailClient({ tmdbId, contentType }: DetailClientProps) {
             data-testid="back-button"
             className="text-text-primary hover:text-text-secondary"
           >
-            <ChevronLeft size={24} />
+            <CaretLeftIcon size={24} />
           </button>
         </div>
-        <EmptyState icon={AlertCircle} title="作品が見つかりません" />
+        <EmptyState icon={WarningCircleIcon} title="作品が見つかりません" />
       </div>
     );
   }
@@ -134,7 +138,7 @@ export function DetailClient({ tmdbId, contentType }: DetailClientProps) {
               data-testid="back-button"
               className="text-white hover:text-text-secondary bg-black/30 rounded-full p-1"
             >
-              <ChevronLeft size={24} />
+              <CaretLeftIcon size={24} />
             </button>
             <div className="relative">
               <button
@@ -143,7 +147,7 @@ export function DetailClient({ tmdbId, contentType }: DetailClientProps) {
                 data-testid="menu-button"
                 className="text-white hover:text-text-secondary bg-black/30 rounded-full p-1"
               >
-                <Ellipsis size={24} />
+                <DotsThreeIcon size={24} />
               </button>
               {menuOpen && (
                 <>

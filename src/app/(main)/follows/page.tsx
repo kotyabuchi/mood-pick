@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Users } from 'lucide-react';
+import { UsersIcon } from '@phosphor-icons/react/ssr';
 
 import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenHeader } from '@/components/ui/screen-header';
@@ -51,7 +51,7 @@ export default function FollowsPage() {
           <UserListSkeleton />
         ) : users.length === 0 ? (
           <EmptyState
-            icon={Users}
+            icon={UsersIcon}
             title={
               activeTab === 'following'
                 ? 'まだ誰もフォローしていません'

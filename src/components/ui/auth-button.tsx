@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import { SpinnerGapIcon } from '@phosphor-icons/react/ssr';
 
 import { cn } from '@/lib/cn';
 
@@ -41,7 +41,7 @@ export function AuthButton({
       )}
     >
       {loading ? (
-        <Loader2
+        <SpinnerGapIcon
           size={20}
           className="animate-spin"
           data-testid="loading-indicator"

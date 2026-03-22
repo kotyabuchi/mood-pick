@@ -1,11 +1,17 @@
 'use client';
 
+import type { ComponentType } from 'react';
+
 import { cn } from '@/lib/cn';
 
-import type { LucideIcon } from 'lucide-react';
+type IconComponent = ComponentType<{
+  size?: string | number;
+  className?: string;
+  'aria-hidden'?: boolean | 'true' | 'false';
+}>;
 
 interface MoodChipProps {
-  mood: { id: string; icon: LucideIcon; label: string };
+  mood: { id: string; icon: IconComponent; label: string };
   selected: boolean;
   onPress: () => void;
 }

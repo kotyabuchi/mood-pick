@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { AlertCircle } from 'lucide-react';
+import { WarningCircleIcon } from '@phosphor-icons/react/ssr';
 
 export default function GlobalError({
   error,
@@ -16,7 +16,7 @@ export default function GlobalError({
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 text-center">
-      <AlertCircle size={64} className="text-error mb-6" />
+      <WarningCircleIcon size={64} className="text-error mb-6" />
       <h1 className="text-2xl font-bold text-text-primary mb-2">
         エラーが発生しました
       </h1>

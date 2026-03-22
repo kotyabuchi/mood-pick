@@ -1,7 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import { AlertTriangle, Loader2, LogOut, RefreshCw } from 'lucide-react';
+import {
+  ArrowClockwiseIcon,
+  SignOutIcon,
+  SpinnerGapIcon,
+  WarningIcon,
+} from '@phosphor-icons/react/ssr';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { useAuth } from '@/context/auth-context';
@@ -60,7 +65,7 @@ export function ProfileSetupGuard({
     // Redirecting — show spinner (no nav)
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 size={32} className="animate-spin text-accent" />
+        <SpinnerGapIcon size={32} className="animate-spin text-accent" />
       </div>
     );
   }
@@ -72,7 +77,7 @@ export function ProfileSetupGuard({
         {navigation}
         <main id="main-content" className={mainClassName}>
           <div className="flex items-center justify-center min-h-[50vh]">
-            <Loader2 size={32} className="animate-spin text-accent" />
+            <SpinnerGapIcon size={32} className="animate-spin text-accent" />
           </div>
         </main>
       </>
@@ -87,7 +92,7 @@ export function ProfileSetupGuard({
         <main id="main-content" className={mainClassName}>
           <div className="flex items-center justify-center min-h-[50vh] px-4">
             <div className="text-center max-w-sm">
-              <AlertTriangle size={48} className="text-accent mx-auto mb-4" />
+              <WarningIcon size={48} className="text-accent mx-auto mb-4" />
               <h2 className="text-lg font-bold text-text-primary mb-2">
                 プロフィールの読み込みに失敗しました
               </h2>
@@ -100,7 +105,7 @@ export function ProfileSetupGuard({
                   onClick={() => refetch()}
                   className="w-full py-3 rounded-lg bg-accent text-white font-bold text-sm flex items-center justify-center gap-2 hover:bg-accent-hover transition-colors"
                 >
-                  <RefreshCw size={16} />
+                  <ArrowClockwiseIcon size={16} />
                   再試行
                 </button>
                 <button
@@ -108,7 +113,7 @@ export function ProfileSetupGuard({
                   onClick={() => signOut()}
                   className="w-full py-3 rounded-lg border border-text-secondary text-text-primary font-bold text-sm flex items-center justify-center gap-2 hover:bg-surface-light transition-colors"
                 >
-                  <LogOut size={16} />
+                  <SignOutIcon size={16} />
                   ログアウト
                 </button>
               </div>

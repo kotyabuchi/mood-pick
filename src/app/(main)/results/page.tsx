@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useMemo } from 'react';
-import { Search } from 'lucide-react';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react/ssr';
 import { useSearchParams } from 'next/navigation';
 
 import { ContentCard } from '@/components/ui/content-card';
@@ -76,7 +76,7 @@ function ResultsContent() {
       <div className="px-4 pb-8 lg:px-0 space-y-2">
         {results.length === 0 ? (
           <EmptyState
-            icon={Search}
+            icon={MagnifyingGlassIcon}
             title="一致する作品がありません"
             description="別の条件で作品を追加してみてください"
           />

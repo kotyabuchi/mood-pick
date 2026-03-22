@@ -1,7 +1,7 @@
 'use client';
 
 import { useOptimistic, useState, useTransition } from 'react';
-import { CheckCircle2, ChevronLeft } from 'lucide-react';
+import { CaretLeftIcon, CheckCircleIcon } from '@phosphor-icons/react/ssr';
 import { useRouter } from 'next/navigation';
 
 import { AuthButton } from '@/components/ui/auth-button';
@@ -36,7 +36,7 @@ export default function ForgotPasswordPage() {
   if (showSuccess) {
     return (
       <div className="flex flex-col items-center">
-        <CheckCircle2 size={64} className="text-success" />
+        <CheckCircleIcon size={64} className="text-success" />
         <h2 className="text-lg font-bold text-text-primary text-center mt-6 mb-4">
           メールを送信しました
         </h2>
@@ -61,7 +61,7 @@ export default function ForgotPasswordPage() {
           className="text-text-primary hover:text-text-secondary transition-colors"
           data-testid="back-button"
         >
-          <ChevronLeft size={24} />
+          <CaretLeftIcon size={24} />
         </button>
       </div>
 

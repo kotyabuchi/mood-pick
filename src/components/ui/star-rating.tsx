@@ -1,6 +1,6 @@
 'use client';
 
-import { Star } from 'lucide-react';
+import { StarIcon } from '@phosphor-icons/react/ssr';
 
 interface StarRatingProps {
   rating: number;
@@ -23,7 +23,7 @@ export function StarRating({
         const isFilled = starValue <= rating;
 
         const star = (
-          <Star
+          <StarIcon
             key={starValue}
             size={iconSize}
             className={isFilled ? 'fill-warning text-warning' : 'text-warning'}
@@ -39,7 +39,7 @@ export function StarRating({
               onClick={() => onChange?.(starValue)}
               data-testid={isFilled ? 'star-filled' : 'star-outline'}
             >
-              <Star
+              <StarIcon
                 size={iconSize}
                 className={
                   isFilled ? 'fill-warning text-warning' : 'text-warning'
