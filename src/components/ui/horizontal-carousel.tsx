@@ -35,7 +35,7 @@ export function HorizontalCarousel({
           </button>
         )}
       </div>
-      <div className="overflow-x-auto scrollbar-thin">
+      <div className="w-full overflow-x-auto scrollbar-thin">
         <div className="flex gap-3 px-4">{children}</div>
       </div>
     </div>

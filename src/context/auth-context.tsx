@@ -49,13 +49,19 @@ function mapSupabaseUser(supabaseUser: User): AuthUser {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [supabase] = useState(() => createClient());
+  const [supabase, setSupabase] = useState<ReturnType<
+    typeof createClient
+  > | null>(null);
   const [state, setState] = useState<AuthState>({
     user: null,
     session: null,
     isLoading: true,
     isAuthenticated: false,
   });
+
+  useEffect(() => {
+    setSupabase(createClient());
+  }, []);
 
   const updateStateFromSession = useCallback((session: Session | null) => {
     if (session?.user) {
@@ -76,6 +82,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
+    if (!supabase) return;
+
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       if (error) {
         console.error('Failed to get session:', error);
@@ -113,6 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       email: string,
       password: string,
     ): Promise<{ error: AuthError | null }> => {
+      if (!supabase) return { error: null };
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -130,6 +139,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       error: AuthError | null;
       needsEmailVerification: boolean;
     }> => {
+      if (!supabase) return { error: null, needsEmailVerification: false };
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -146,11 +156,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const signOut = useCallback(async (): Promise<void> => {
-    await supabase.auth.signOut();
+    await supabase?.auth.signOut();
   }, [supabase]);
 
   const resetPassword = useCallback(
     async (email: string): Promise<{ error: AuthError | null }> => {
+      if (!supabase) return { error: null };
       const { error } = await supabase.auth.resetPasswordForEmail(email);
       return { error };
     },
@@ -159,6 +170,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const resendVerificationEmail = useCallback(
     async (email: string): Promise<{ error: AuthError | null }> => {
+      if (!supabase) return { error: null };
       const { error } = await supabase.auth.resend({
         type: 'signup',
         email,
