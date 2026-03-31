@@ -16,7 +16,7 @@ export function HorizontalCarousel({
   children,
 }: HorizontalCarouselProps) {
   return (
-    <div className="mb-4">
+    <section className="mb-4 min-w-0 overflow-x-hidden">
       <div className="flex items-center justify-between px-4 mb-2">
         <div className="flex items-center gap-1">
           {icon}
@@ -35,9 +35,9 @@ export function HorizontalCarousel({
           </button>
         )}
       </div>
-      <div className="overflow-x-auto scrollbar-thin">
-        <div className="flex gap-3 px-4">{children}</div>
+      <div className="w-full min-w-0 overflow-x-auto overscroll-x-contain scrollbar-thin">
+        <div className="flex w-max min-w-full gap-3 px-4">{children}</div>
       </div>
-    </div>
+    </section>
   );
 }
